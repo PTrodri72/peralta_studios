@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'; // 🌟 ADICIONA ESTA LINHA
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
