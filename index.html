@@ -4,164 +4,283 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TrustStore MTA | A Tua Loja de Scripts</title>
-    <!-- Tailwind CSS para um design moderno e rápido -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=EUR"></script>
     <style>
-        body { background-color: #0b0f19; color: #f3f4f6; }
+        body { background-color: #0b0f19; color: #f3f4f6; scroll-behavior: smooth; }
         .purple-gradient { background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 </head>
-<body class="font-sans antialiased">
+<body class="font-sans antialiased flex flex-col min-h-screen">
 
-    <!-- MENU DE NAVEGAÇÃO -->
     <nav class="border-b border-gray-800 bg-gray-900 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.hash = '#inicio'">
                     <i class="fa-solid fa-store text-purple-500 text-2xl"></i>
                     <span class="text-xl font-bold tracking-wider uppercase text-white">TrustStore <span class="text-purple-500">MTA</span></span>
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#" class="text-gray-300 hover:text-purple-400 transition">Início</a>
-                    <a href="#" class="text-gray-300 hover:text-purple-400 transition">Scripts</a>
-                    <a href="#" class="text-gray-300 hover:text-purple-400 transition">Sistemas VIPS</a>
-                    <a href="#" class="text-gray-300 hover:text-purple-400 transition">Suporte</a>
+                    <a href="#inicio" class="nav-link text-gray-300 hover:text-purple-400 transition font-medium">Início</a>
+                    <a href="#produtos" class="nav-link text-gray-300 hover:text-purple-400 transition font-medium">Produtos</a>
+                    <a href="#suporte" class="nav-link text-gray-300 hover:text-purple-400 transition font-medium">Suporte</a>
                 </div>
                 <div class="flex items-center gap-4">
-                    <button class="relative text-gray-300 hover:text-white transition">
+                    <button onclick="toggleCarrinho()" class="relative text-gray-300 hover:text-white transition p-2">
                         <i class="fa-solid fa-basket-shopping text-xl"></i>
-                        <span class="absolute -top-2 -right-2 bg-purple-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
-                    </button>
-                    <button class="purple-gradient hover:opacity-90 text-white px-4 py-2 rounded-md font-medium transition text-sm">
-                        Entrar / Registar
+                        <span id="cart-count" class="absolute top-0 right-0 bg-purple-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
                     </button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- BANNER PRINCIPAL -->
-    <header class="relative overflow-hidden py-20 border-b border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight mb-4">
-                Eleva o nível do teu servidor de <span class="text-purple-500">MTA</span>
-            </h1>
-            <p class="max-w-2xl mx-auto text-gray-400 text-lg mb-8">
-                Scripts otimizados, painéis modernos e sistemas exclusivos com entrega 100% automática e segura.
-            </p>
-            <div class="flex justify-center gap-4">
-                <a href="#produtos" class="purple-gradient px-6 py-3 rounded-lg font-semibold text-white shadow-lg hover:shadow-purple-500/20 transition">Ver Catálogo</a>
-                <a href="#" class="bg-gray-800 hover:bg-gray-700 px-6 py-3 rounded-lg font-semibold text-white transition border border-gray-700">Comunidade Discord</a>
+    <div id="inicio" class="tab-content active">
+        <header class="relative overflow-hidden py-24 border-b border-gray-800 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-gray-900 to-transparent">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+                <span class="bg-purple-500/10 text-purple-400 text-xs font-bold px-3 py-1.5 rounded-full border border-purple-500/30 uppercase tracking-widest">Loja Oficial</span>
+                <h1 class="text-5xl sm:text-7xl font-extrabold text-white tracking-tight mb-6 mt-4">
+                    Eleva o nível do teu servidor de <span class="text-purple-500">MTA</span>
+                </h1>
+                <p class="max-w-2xl mx-auto text-gray-400 text-lg mb-8">
+                    Scripts otimizados, painéis modernos e sistemas exclusivos com entrega rápida e suporte dedicado.
+                </p>
+                <div class="flex justify-center gap-4">
+                    <a href="#produtos" class="purple-gradient px-6 py-3 rounded-lg font-semibold text-white shadow-lg hover:shadow-purple-500/20 transition">Ver Produtos</a>
+                    <a href="#suporte" class="bg-gray-800 hover:bg-gray-700 px-6 py-3 rounded-lg font-semibold text-white transition border border-gray-700">Precisas de Ajuda?</a>
+                </div>
             </div>
-        </div>
-    </header>
+        </header>
+    </div>
 
-    <!-- VITRINE DE PRODUTOS -->
-    <main id="produtos" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div class="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-4">
-            <div>
-                <h2 class="text-2xl font-bold text-white mb-2">Recursos em Destaque</h2>
-                <p class="text-gray-400 text-sm">Os scripts mais procurados e bem avaliados do momento.</p>
-            </div>
-            <!-- Filtros básicos -->
-            <div class="flex gap-2 overflow-x-auto pb-2">
-                <button class="bg-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap">Todos</button>
-                <button class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap">Corporações</button>
-                <button class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap">Painéis HUD</button>
-                <button class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap">Sistemas VIP</button>
-            </div>
+    <div id="produtos" class="tab-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex-grow w-full">
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold text-white mb-2">Nosso Catálogo</h2>
+            <p class="text-gray-400 text-sm">Escolha os melhores recursos para o seu servidor Multi Theft Auto.</p>
         </div>
 
-        <!-- Grelha de Produtos (Exemplo de 3 Produtos) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            <!-- Produto 1 -->
-            <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition group flex flex-col justify-between">
-                <div>
-                    <div class="relative bg-gray-800 aspect-video flex items-center justify-center">
-                        <!-- Imagem Temporária (Substituir por print do script) -->
-                        <i class="fa-solid fa-code text-5xl text-gray-600 group-hover:text-purple-400 transition"></i>
-                        <span class="absolute top-3 right-3 bg-green-500 text-xs text-black font-bold px-2 py-1 rounded">Entrega Instantânea</span>
+            <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition flex flex-col justify-between">
+                <div class="p-6">
+                    <div class="bg-gray-800 rounded-lg aspect-video flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-code text-4xl text-purple-500"></i>
                     </div>
-                    <div class="p-6">
-                        <span class="text-xs text-purple-400 font-bold tracking-wider uppercase">Painel / HUD</span>
-                        <h3 class="text-xl font-bold text-white mt-1 mb-2">Concessionária Avançada v2.0</h3>
-                        <p class="text-gray-400 text-sm line-clamp-2">Painel totalmente em DX, com sistema de test-drive, financiamento e tunagem integrada para servidores de Roleplay.</p>
-                    </div>
+                    <span class="text-xs text-purple-400 font-bold uppercase tracking-wider">HUD / Painel</span>
+                    <h3 class="text-xl font-bold text-white mt-1">Concessionária Avançada v2.0</h3>
+                    <p class="text-gray-400 text-sm mt-2">Painel moderno em DX com sistema de test-drive e financiamento.</p>
                 </div>
-                <div class="p-6 pt-0">
-                    <div class="border-t border-gray-800 pt-4 flex items-center justify-between">
-                        <div>
-                            <span class="text-xs text-gray-500 block">Preço único</span>
-                            <span class="text-2xl font-black text-white">14.99€</span>
-                        </div>
-                        <button class="bg-gray-800 hover:bg-purple-600 text-white font-medium px-4 py-2 rounded-lg transition text-sm flex items-center gap-2">
-                            <i class="fa-solid fa-cart-plus"></i> Comprar
-                        </button>
-                    </div>
+                <div class="p-6 pt-0 border-t border-gray-800/50 flex items-center justify-between mt-4">
+                    <span class="text-2xl font-black text-white">14.99€</span>
+                    <button onclick="adicionarAoCarrinho('Concessionária Avançada', 14.99)" class="bg-purple-600 hover:bg-purple-700 text-white font-medium px-4 py-2 rounded-lg transition text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-cart-plus"></i> Adicionar
+                    </button>
                 </div>
             </div>
 
-            <!-- Produto 2 -->
-            <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition group flex flex-col justify-between">
-                <div>
-                    <div class="relative bg-gray-800 aspect-video flex items-center justify-center">
-                        <i class="fa-solid fa-shield-halved text-5xl text-gray-600 group-hover:text-purple-400 transition"></i>
-                        <span class="absolute top-3 right-3 bg-purple-500 text-xs text-white font-bold px-2 py-1 rounded">Mais Vendido</span>
+            <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition flex flex-col justify-between">
+                <div class="p-6">
+                    <div class="bg-gray-800 rounded-lg aspect-video flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-box text-4xl text-purple-500"></i>
                     </div>
-                    <div class="p-6">
-                        <span class="text-xs text-purple-400 font-bold tracking-wider uppercase">Sistemas</span>
-                        <h3 class="text-xl font-bold text-white mt-1 mb-2">Sistema de Inventário por Peso</h3>
-                        <p class="text-gray-400 text-sm line-clamp-2">Inventário moderno estilo FiveM com sistema de drop de itens no chão, armas com munições reais e uso de consumíveis.</p>
-                    </div>
+                    <span class="text-xs text-purple-400 font-bold uppercase tracking-wider">Sistemas</span>
+                    <h3 class="text-xl font-bold text-white mt-1">Inventário por Peso</h3>
+                    <p class="text-gray-400 text-sm mt-2">Inventário estilo FiveM com drop de itens no chão e uso de munições.</p>
                 </div>
-                <div class="p-6 pt-0">
-                    <div class="border-t border-gray-800 pt-4 flex items-center justify-between">
-                        <div>
-                            <span class="text-xs text-gray-500 block">Preço único</span>
-                            <span class="text-2xl font-black text-white">19.99€</span>
-                        </div>
-                        <button class="bg-gray-800 hover:bg-purple-600 text-white font-medium px-4 py-2 rounded-lg transition text-sm flex items-center gap-2">
-                            <i class="fa-solid fa-cart-plus"></i> Comprar
-                        </button>
-                    </div>
+                <div class="p-6 pt-0 border-t border-gray-800/50 flex items-center justify-between mt-4">
+                    <span class="text-2xl font-black text-white">19.99€</span>
+                    <button onclick="adicionarAoCarrinho('Inventário por Peso', 19.99)" class="bg-purple-600 hover:bg-purple-700 text-white font-medium px-4 py-2 rounded-lg transition text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-cart-plus"></i> Adicionar
+                    </button>
                 </div>
             </div>
 
-            <!-- Produto 3 -->
-            <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition group flex flex-col justify-between">
-                <div>
-                    <div class="relative bg-gray-800 aspect-video flex items-center justify-center">
-                        <i class="fa-solid fa-gavel text-5xl text-gray-600 group-hover:text-purple-400 transition"></i>
+            <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition flex flex-col justify-between">
+                <div class="p-6">
+                    <div class="bg-gray-800 rounded-lg aspect-video flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-shield-halved text-4xl text-purple-500"></i>
                     </div>
-                    <div class="p-6">
-                        <span class="text-xs text-purple-400 font-bold tracking-wider uppercase">Corporações</span>
-                        <h3 class="text-xl font-bold text-white mt-1 mb-2">Sistema de Polícia com MDT</h3>
-                        <p class="text-gray-400 text-sm line-clamp-2">Computador de bordo para viaturas policiais. Registo de multas, mandados de captura e consulta de fichas criminais em tempo real.</p>
-                    </div>
+                    <span class="text-xs text-purple-400 font-bold uppercase tracking-wider">Corporações</span>
+                    <h3 class="text-xl font-bold text-white mt-1">Sistema de Polícia com MDT</h3>
+                    <p class="text-gray-400 text-sm mt-2">Computador de bordo para viaturas com registo de multas e fichas.</p>
                 </div>
-                <div class="p-6 pt-0">
-                    <div class="border-t border-gray-800 pt-4 flex items-center justify-between">
-                        <div>
-                            <span class="text-xs text-gray-500 block">Preço único</span>
-                            <span class="text-2xl font-black text-white">9.99€</span>
-                        </div>
-                        <button class="bg-gray-800 hover:bg-purple-600 text-white font-medium px-4 py-2 rounded-lg transition text-sm flex items-center gap-2">
-                            <i class="fa-solid fa-cart-plus"></i> Comprar
-                        </button>
-                    </div>
+                <div class="p-6 pt-0 border-t border-gray-800/50 flex items-center justify-between mt-4">
+                    <span class="text-2xl font-black text-white">9.99€</span>
+                    <button onclick="adicionarAoCarrinho('Sistema de Polícia MDT', 9.99)" class="bg-purple-600 hover:bg-purple-700 text-white font-medium px-4 py-2 rounded-lg transition text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-cart-plus"></i> Adicionar
+                    </button>
                 </div>
             </div>
-
         </div>
-    </main>
+    </div>
 
-    <!-- RODAPÉ (FOOTER) -->
-    <footer class="bg-gray-950 border-t border-gray-800 py-8 text-center text-sm text-gray-500">
+    <div id="suporte" class="tab-content max-w-3xl mx-auto px-4 py-16 flex-grow w-full">
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-8 text-center">
+            <i class="fa-brands fa-discord text-6xl text-indigo-500 mb-4"></i>
+            <h2 class="text-3xl font-bold text-white mb-2">Central de Ajuda</h2>
+            <p class="text-gray-400 mb-6">Tens dúvidas sobre a instalação ou problemas com algum script? Abre um ticket no nosso Discord.</p>
+            <a href="#" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg transition shadow-lg">
+                Entrar no Discord
+            </a>
+        </div>
+    </div>
+
+    <div id="sidebar-carrinho" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-gray-900 border-l border-gray-800 transform translate-x-full transition-transform duration-300 z-50 p-6 flex flex-col justify-between hidden shadow-2xl">
+        <div>
+            <div class="flex items-center justify-between border-b border-gray-800 pb-4 mb-4">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2"><i class="fa-solid fa-basket-shopping text-purple-500"></i> O Teu Carrinho</h3>
+                <button onclick="toggleCarrinho()" class="text-gray-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="lista-carrinho" class="space-y-4 overflow-y-auto max-h-[50vh]">
+                <p class="text-gray-500 text-center py-4">O carrinho está vazio.</p>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-800 pt-4 mt-4">
+            <div class="flex items-center justify-between mb-6">
+                <span class="text-gray-400 font-medium">Total a pagar:</span>
+                <span id="total-carrinho" class="text-2xl font-black text-white">0.00€</span>
+            </div>
+            <div id="paypal-button-container" class="hidden"></div>
+            <p id="aviso-vazio" class="text-center text-xs text-gray-500">Adiciona produtos para libertar o pagamento.</p>
+        </div>
+    </div>
+
+    <footer class="bg-gray-950 border-t border-gray-800 py-8 text-center text-sm text-gray-500 mt-auto">
         <p>&copy; 2026 TrustStore MTA. Todos os direitos reservados.</p>
-        <p class="mt-2 text-xs text-gray-600">Não temos afiliação direta com a Rockstar Games ou com o projeto Multi Theft Auto.</p>
     </footer>
+
+    <script>
+        // --- 1. SISTEMA DE ABAS (ROUTING) ---
+        function gerirAbas() {
+            const hash = window.location.hash || '#inicio';
+            
+            // Ocultar todas as abas
+            document.querySelectorAll('.tab-content').forEach(aba => aba.classList.remove('active'));
+            
+            // Mostrar a aba atual
+            const abaAtiva = document.querySelector(hash);
+            if (abaAtiva) {
+                abaAtiva.classList.add('active');
+            }
+
+            // Atualizar estilo visual dos links do menu
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if(link.getAttribute('href') === hash) {
+                    link.classList.add('text-purple-500');
+                    link.classList.remove('text-gray-300');
+                } else {
+                    link.classList.remove('text-purple-500');
+                    link.classList.add('text-gray-300');
+                }
+            });
+        }
+
+        window.addEventListener('hashchange', gerirAbas);
+        window.addEventListener('load', gerirAbas);
+
+
+        // --- 2. SISTEMA DO CARRINHO DE COMPRAS ---
+        let carrinho = [];
+
+        function toggleCarrinho() {
+            const sidebar = document.getElementById('sidebar-carrinho');
+            sidebar.classList.toggle('hidden');
+            setTimeout(() => sidebar.classList.toggle('translate-x-full'), 10);
+        }
+
+        function adicionarAoCarrinho(nome, preco) {
+            const itemExistente = carrinho.find(item => item.nome === nome);
+            
+            if (itemExistente) {
+                itemExistente.quantidade += 1;
+            } else {
+                carrinho.push({ nome, preco, quantidade: 1 });
+            }
+            
+            atualizarInterfaceCarrinho();
+            // Abre o carrinho automaticamente ao adicionar um item
+            const sidebar = document.getElementById('sidebar-carrinho');
+            if(sidebar.classList.contains('hidden')) toggleCarrinho();
+        }
+
+        function removerDoCarrinho(nome) {
+            carrinho = carrinho.filter(item => item.nome !== nome);
+            atualizarInterfaceCarrinho();
+        }
+
+        function atualizarInterfaceCarrinho() {
+            const listaHtml = document.getElementById('lista-carrinho');
+            const totalHtml = document.getElementById('total-carrinho');
+            const contagemHtml = document.getElementById('cart-count');
+            const paypalContainer = document.getElementById('paypal-button-container');
+            const avisoVazio = document.getElementById('aviso-vazio');
+
+            listaHtml.innerHTML = '';
+            let total = 0;
+            let totalItens = 0;
+
+            if (carrinho.length === 0) {
+                listaHtml.innerHTML = '<p class="text-gray-500 text-center py-4">O carrinho está vazio.</p>';
+                paypalContainer.classList.add('hidden');
+                avisoVazio.classList.remove('hidden');
+            } else {
+                paypalContainer.classList.remove('hidden');
+                avisoVazio.classList.add('hidden');
+
+                carrinho.forEach(item => {
+                    total += item.preco * item.quantidade;
+                    totalItens += item.quantidade;
+
+                    listaHtml.innerHTML += `
+                        <div class="flex items-center justify-between bg-gray-800/50 p-3 rounded-lg border border-gray-800">
+                            <div>
+                                <h4 class="font-bold text-sm text-white">${item.nome}</h4>
+                                <p class="text-xs text-gray-400">${item.preco.toFixed(2)}€ x ${item.quantidade}</p>
+                            </div>
+                            <button onclick="removerDoCarrinho('${item.nome}')" class="text-red-400 hover:text-red-500 text-sm p-1">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+            }
+
+            totalHtml.innerText = `${total.toFixed(2)}€`;
+            contagemHtml.innerText = totalItens;
+
+            // Atualiza o valor dinâmico global para o PayPal ler
+            window.valorTotalCheckout = total.toFixed(2);
+        }
+
+
+        // --- 3. INTEGRAÇÃO DO PAYPAL ---
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: window.valorTotalCheckout // Envia o total calculado do carrinho
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert('Pagamento efetuado com sucesso por ' + details.payer.name.given_name + '! Os teus scripts serão enviados.');
+                    carrinho = []; // Limpa o carrinho após o sucesso
+                    atualizarInterfaceCarrinho();
+                    toggleCarrinho();
+                });
+            },
+            onError: function(err) {
+                console.error('Erro no checkout do PayPal:', err);
+                alert('Ocorreu um problema ao processar o pagamento.');
+            }
+        }).render('#paypal-button-container');
+    </script>
 
 </body>
 </html>
