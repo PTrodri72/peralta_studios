@@ -7,409 +7,407 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=sb&currency=EUR"></script>
 
 <style>
 body {
 background:#0b0f19;
 color:white;
-font-family: 'Inter', sans-serif;
-overflow-x: hidden;
+font-family:sans-serif;
 }
 
-/* Sistema de Abas Corrigido com Opacidade e Visibilidade */
 .tab {
-display: none;
-opacity: 0;
-transform: translateY(15px);
-transition: opacity 0.4s ease, transform 0.4s ease;
+display:none;
 }
 
 .tab.active {
-display: block !important;
-opacity: 1;
-transform: translateY(0);
+display:block;
 }
 
 .gradient {
-background: linear-gradient(135deg,#7c3aed,#4c1d95);
-transition: transform 0.2s, filter 0.2s;
-}
-
-.gradient:hover {
-transform: scale(1.03);
-filter: brightness(1.1);
-}
-
-.card-hover {
-transition: transform 0.3s ease, border-color 0.3s ease;
-}
-.card-hover:hover {
-transform: translateY(-5px);
-border-color: #7c3aed;
+background:linear-gradient(135deg,#7c3aed,#4c1d95);
 }
 </style>
 </head>
 <body>
 
-<nav class="bg-gray-900/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-800 p-4 flex justify-between items-center">
-<h1 class="text-2xl font-bold tracking-wider animate__animated animate__fadeInLeft" style="cursor:pointer;" onclick="irParaAba('inicio')">
+<nav class="bg-gray-900 border-b border-gray-800 p-4 flex justify-between items-center">
+<h1 class="text-2xl font-bold">
 TrustStore <span class="text-purple-500">MTA</span>
 </h1>
 
-<div class="flex gap-6 items-center font-medium">
-<button onclick="irParaAba('inicio')" class="hover:text-purple-400 transition-colors focus:outline-none">Início</button>
-<button onclick="irParaAba('produtos')" class="hover:text-purple-400 transition-colors focus:outline-none">Produtos</button>
-<button onclick="irParaAba('cliente')" id="cliente-menu" class="hover:text-purple-400 transition-colors focus:outline-none">Área Cliente</button>
-<button onclick="irParaAba('admin')" id="admin-menu" class="hidden text-red-400 hover:text-red-300 transition-colors focus:outline-none">Admin</button>
+<div class="flex gap-4 items-center">
+<a href="#inicio">Início</a>
+<a href="#produtos">Produtos</a>
+<a href="#cliente" id="cliente-menu" class="hidden">Cliente</a>
+<a href="#admin" id="admin-menu" class="hidden">Admin</a>
 
-<div id="auth-area" class="animate__animated animate__fadeInRight">
-<button onclick="irParaAba('login')" class="gradient px-5 py-2.5 rounded-lg shadow-lg shadow-purple-500/20 text-sm font-semibold">
-Entrar / Registar
-</button>
+<div id="auth-area">
+<a href="#login" class="gradient px-4 py-2 rounded-lg">
+Entrar
+</a>
 </div>
 </div>
 </nav>
 
-<section id="inicio" class="tab active">
-    <div class="p-10 text-center max-w-4xl mx-auto my-12 animate__animated animate__fadeIn">
-        <h1 class="text-6xl font-black mb-6 leading-tight">
-            Scripts Premium para <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-500">MTA:SA</span>
-        </h1>
-        <p class="text-gray-400 text-xl max-w-2xl mx-auto mb-8">
-            Leva o teu servidor ao próximo nível com os sistemas mais otimizados, inovadores e seguros do mercado português.
-        </p>
-        <button onclick="irParaAba('produtos')" class="gradient px-8 py-4 rounded-xl font-bold text-lg inline-flex items-center gap-2 shadow-lg shadow-purple-500/30">
-            Ver Catálogo <i class="fa-solid fa-arrow-right text-sm"></i>
-        </button>
-    </div>
-
-    <div class="bg-gray-900/50 py-16 border-y border-gray-800/60">
-        <div class="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div class="space-y-4">
-                <span class="text-purple-500 font-bold uppercase tracking-widest text-sm">Quem Somos</span>
-                <h2 class="text-3xl font-bold text-white">Compromisso com a Performance</h2>
-                <p class="text-gray-400 leading-relaxed">
-                    Na <strong>TrustStore MTA</strong>, focamo-nos em desenvolver recursos que não só impressionam visualmente, mas que mantêm o teu servidor leve e livre de lag (0.00ms). Todos os scripts contam com suporte ativo e atualizações constantes.
-                </p>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="bg-gray-900 p-6 rounded-xl border border-gray-800 text-center card-hover">
-                    <i class="fa-solid fa-shield-halved text-purple-500 text-3xl mb-2"></i>
-                    <h4 class="font-bold">100% Seguro</h4>
-                </div>
-                <div class="bg-gray-900 p-6 rounded-xl border border-gray-800 text-center card-hover">
-                    <i class="fa-solid fa-headset text-purple-500 text-3xl mb-2"></i>
-                    <h4 class="font-bold">Suporte 24/7</h4>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="max-w-5xl mx-auto px-6 py-16 text-center">
-        <div class="bg-gradient-to-r from-purple-900/20 to-indigo-900/20 border border-purple-500/20 rounded-2xl p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-                <h3 class="text-4xl font-black text-purple-500 mb-1" id="count-clientes">42</h3>
-                <p class="text-gray-400 uppercase tracking-wider text-xs font-bold">Clientes Registados</p>
-            </div>
-            <div>
-                <h3 class="text-4xl font-black text-purple-500 mb-1">+50</h3>
-                <p class="text-gray-400 uppercase tracking-wider text-xs font-bold">Recursos Criados</p>
-            </div>
-            <div>
-                <h3 class="text-4xl font-black text-purple-500 mb-1">99.9%</h3>
-                <p class="text-gray-400 uppercase tracking-wider text-xs font-bold">Satisfação</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="max-w-5xl mx-auto px-6 pb-20">
-        <h2 class="text-3xl font-bold text-center mb-12">O que dizem os nossos clientes</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-gray-900 p-6 rounded-xl border border-gray-800 card-hover">
-                <div class="flex text-yellow-500 gap-1 mb-3">
-                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                </div>
-                <p class="text-gray-400 text-sm mb-4">"O script de Concessionária é incrivelmente leve. O meu servidor ganhou outra vida e os jogadores adoraram!"</p>
-                <span class="font-bold text-sm block text-purple-400">- Tiago Silva (Dono RP)</span>
-            </div>
-            <div class="bg-gray-900 p-6 rounded-xl border border-gray-800 card-hover">
-                <div class="flex text-yellow-500 gap-1 mb-3">
-                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                </div>
-                <p class="text-gray-400 text-sm mb-4">"Suporte impecável. Tive uma dúvida na instalação e resolveram-me o problema em menos de 10 minutos por Discord."</p>
-                <span class="font-bold text-sm block text-purple-400">- Ghost_MTA</span>
-            </div>
-            <div class="bg-gray-900 p-6 rounded-xl border border-gray-800 card-hover">
-                <div class="flex text-yellow-500 gap-1 mb-3">
-                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star text-gray-700"></i>
-                </div>
-                <p class="text-gray-400 text-sm mb-4">"Painel de Login lindíssimo e super seguro. Ansioso pelos próximos lançamentos da loja."</p>
-                <span class="font-bold text-sm block text-purple-400">- Lucas_Dev</span>
-            </div>
-        </div>
-    </div>
+<section id="inicio" class="tab active p-10 text-center">
+<h1 class="text-5xl font-bold mb-4">
+Scripts Premium para MTA
+</h1>
+<p class="text-gray-400">
+A melhor loja de scripts para o teu servidor.
+</p>
 </section>
 
-<section id="produtos" class="tab p-10 max-w-6xl mx-auto">
-<h2 class="text-4xl font-black mb-8 border-b border-gray-800 pb-4">Nossos Recursos</h2>
-<div id="produtos-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    </div>
+<section id="produtos" class="tab p-10">
+<h2 class="text-3xl font-bold mb-6">Produtos</h2>
+
+<div id="produtos-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
 </section>
 
-<section id="login" class="tab p-10 max-w-md mx-auto my-12">
-<div class="bg-gray-900 p-8 rounded-2xl border border-gray-800 shadow-2xl relative">
-    
-    <div id="box-login" class="space-y-6">
-        <div>
-            <h2 class="text-3xl font-black">Bem-vindo!</h2>
-            <p class="text-gray-400 text-sm mt-1">Insere os teus dados para aceder à tua conta.</p>
-        </div>
-        <form id="login-form" class="space-y-4">
-            <div>
-                <label class="text-xs font-bold uppercase text-gray-400 block mb-1">Email</label>
-                <input id="email" type="email" required placeholder="exemplo@email.com" class="w-full p-3 rounded-xl bg-gray-800 border border-gray-700 focus:outline-none focus:border-purple-500 transition-colors">
-            </div>
-            <div>
-                <label class="text-xs font-bold uppercase text-gray-400 block mb-1">Password</label>
-                <input id="password" type="password" required placeholder="••••••••" class="w-full p-3 rounded-xl bg-gray-800 border border-gray-700 focus:outline-none focus:border-purple-500 transition-colors">
-            </div>
-            <button type="submit" class="gradient w-full py-3.5 rounded-xl font-bold text-white shadow-lg shadow-purple-500/20 mt-2">
-                Entrar na Loja
-            </button>
-        </form>
-        <p class="text-center text-sm text-gray-400">Não tens conta? <button type="button" onclick="toggleAuthForm(false)" class="text-purple-400 font-bold hover:underline">Criar Conta</button></p>
-    </div>
+<section id="login" class="tab p-10 max-w-md mx-auto">
+<div class="bg-gray-900 p-6 rounded-xl border border-gray-800">
 
-    <div id="box-register" class="space-y-6 hidden">
-        <div>
-            <h2 class="text-3xl font-black">Criar Conta</h2>
-            <p class="text-gray-400 text-sm mt-1">Regista-te para obteres os teus scripts de MTA.</p>
-        </div>
-        <form id="register-form" class="space-y-4">
-            <div>
-                <label class="text-xs font-bold uppercase text-gray-400 block mb-1">Email</label>
-                <input id="reg-email" type="email" required placeholder="exemplo@email.com" class="w-full p-3 rounded-xl bg-gray-800 border border-gray-700 focus:outline-none focus:border-purple-500 transition-colors">
-            </div>
-            <div>
-                <label class="text-xs font-bold uppercase text-gray-400 block mb-1">Password</label>
-                <input id="reg-password" type="password" required placeholder="Mínimo 6 caracteres" class="w-full p-3 rounded-xl bg-gray-800 border border-gray-700 focus:outline-none focus:border-purple-500 transition-colors">
-            </div>
-            <button type="submit" class="gradient w-full py-3.5 rounded-xl font-bold text-white shadow-lg shadow-purple-500/20 mt-2">
-                Finalizar Registo
-            </button>
-        </form>
-        <p class="text-center text-sm text-gray-400">Já tens conta? <button type="button" onclick="toggleAuthForm(true)" class="text-purple-400 font-bold hover:underline">Fazer Login</button></p>
-    </div>
+<h2 class="text-3xl font-bold mb-6">Login</h2>
+
+<form id="login-form" class="space-y-4">
+<input id="email" type="email" placeholder="Email" class="w-full p-3 rounded bg-gray-800 border border-gray-700">
+
+<input id="password" type="password" placeholder="Password" class="w-full p-3 rounded bg-gray-800 border border-gray-700">
+
+<button class="gradient w-full py-3 rounded-lg font-bold">
+Entrar
+</button>
+</form>
+
+<button id="register-btn" class="mt-4 text-purple-400">
+Criar Conta
+</button>
 
 </div>
 </section>
 
-<section id="cliente" class="tab p-10 max-w-4xl mx-auto">
-<h2 class="text-3xl font-bold mb-2">Área do Cliente</h2>
-<p class="text-gray-400 mb-8">Aqui encontras os teus recursos e o histórico de ficheiros para download.</p>
-<div id="downloads-area" class="space-y-4">
-    </div>
+<section id="cliente" class="tab p-10">
+<h2 class="text-3xl font-bold mb-6">Área Cliente</h2>
+
+<div id="downloads-area" class="space-y-4"></div>
 </section>
 
-<section id="admin" class="tab p-10 max-w-4xl mx-auto">
-<h2 class="text-3xl font-bold mb-6 text-red-400">Painel Administrativo</h2>
+<section id="admin" class="tab p-10">
+<h2 class="text-3xl font-bold mb-6">Painel Admin</h2>
+
 <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
-    <h3 class="text-2xl font-bold mb-4">Adicionar Novo Produto</h3>
-    <div class="space-y-4">
-        <input id="produto-nome" placeholder="Nome do Script" class="w-full p-3 rounded bg-gray-800 border border-gray-700">
-        <input id="produto-preco" placeholder="Preço (€)" type="number" class="w-full p-3 rounded bg-gray-800 border border-gray-700">
-        <input id="produto-imagem" placeholder="URL da Imagem" class="w-full p-3 rounded bg-gray-800 border border-gray-700">
-        <input id="produto-download" placeholder="URL de Download (.zip)" class="w-full p-3 rounded bg-gray-800 border border-gray-700">
-        <button onclick="adicionarProduto()" class="gradient px-6 py-3 rounded-lg font-bold">Publicar Script</button>
-    </div>
+<h3 class="text-2xl font-bold mb-4">Adicionar Produto</h3>
+
+<div class="space-y-4">
+<input id="produto-nome" placeholder="Nome" class="w-full p-3 rounded bg-gray-800 border border-gray-700">
+
+<input id="produto-preco" placeholder="Preço" type="number" class="w-full p-3 rounded bg-gray-800 border border-gray-700">
+
+<input id="produto-imagem" placeholder="Imagem URL" class="w-full p-3 rounded bg-gray-800 border border-gray-700">
+
+<input id="produto-download" placeholder="Download URL" class="w-full p-3 rounded bg-gray-800 border border-gray-700">
+
+<button onclick="adicionarProduto()" class="gradient px-6 py-3 rounded-lg font-bold">
+Adicionar Produto
+</button>
+</div>
+</div>
+
+<div class="bg-gray-900 border border-gray-800 rounded-xl p-6">
+<h3 class="text-2xl font-bold mb-4">Dar Produto a Cliente</h3>
+
+<div class="space-y-4">
+<input id="cliente-email" placeholder="Email Cliente" class="w-full p-3 rounded bg-gray-800 border border-gray-700">
+
+<input id="produto-id" placeholder="ID Produto" class="w-full p-3 rounded bg-gray-800 border border-gray-700">
+
+<button onclick="atribuirProduto()" class="gradient px-6 py-3 rounded-lg font-bold">
+Atribuir Produto
+</button>
+</div>
 </div>
 </section>
 
 <script>
-// ==========================================
-// CONFIGURAÇÃO DO TEU SUPABASE AQUI
-// ==========================================
+
 const supabaseUrl = 'YOUR_SUPABASE_URL'
 const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'
 
-let supabase = null
+const supabase = window.supabase.createClient(
+    supabaseUrl,
+    supabaseKey
+)
+
 const ADMIN_EMAIL = 'igor.rodrigues2120@gmail.com'
+
 let currentUser = null
 
-// Inicialização protegida contra travamentos
-try {
-    if (supabaseUrl !== 'YOUR_SUPABASE_URL' && supabaseKey !== 'YOUR_SUPABASE_ANON_KEY') {
-        supabase = window.supabase.createClient(supabaseUrl, supabaseKey)
-    }
-} catch (e) {
-    console.error("Supabase offline ou não configurado.", e)
+function showTab() {
+
+const hash = window.location.hash || '#inicio'
+
+if(hash === '#admin') {
+
+if(!currentUser || currentUser.email !== ADMIN_EMAIL) {
+window.location.hash = '#inicio'
+return
+}
 }
 
-// FUNÇÃO CRÍTICA FIXADA: Troca as abas sem falha nenhuma
-function irParaAba(idAba) {
-    // 1. Esconde todas as abas existentes
-    const abas = document.querySelectorAll('.tab')
-    abas.forEach(aba => {
-        aba.classList.remove('active', 'animate__animated', 'animate__fadeInUp')
-    })
-
-    // 2. Procura a aba correta e exibe-a
-    const abaAlvo = document.getElementById(idAba)
-    if (abaAlvo) {
-        abaAlvo.classList.add('active', 'animate__animated', 'animate__fadeInUp')
-    }
-    
-    // Atualiza o link na barra de endereços de forma amigável
-    window.location.hash = '#' + idAba
+if(hash === '#cliente' && !currentUser) {
+window.location.hash = '#login'
+return
 }
 
-// Alternar entre o formulário de Login e de Registo
-function toggleAuthForm(mostrarLogin) {
-    const boxLogin = document.getElementById('box-login')
-    const boxRegister = document.getElementById('box-register')
-    if(mostrarLogin) {
-        boxRegister.classList.add('hidden')
-        boxLogin.classList.remove('hidden')
-    } else {
-        boxLogin.classList.add('hidden')
-        boxRegister.classList.remove('hidden')
-    }
+const tabs = document.querySelectorAll('.tab')
+
+tabs.forEach(tab => tab.classList.remove('active'))
+
+const active = document.querySelector(hash)
+
+if(active) {
+active.classList.add('active')
+}
 }
 
-// Gestor de Sessões e Interface do Utilizador
-async function verificarSessao() {
-    if (!supabase) {
-        configurarDemonstracao();
-        return;
-    }
+window.addEventListener('hashchange', showTab)
 
-    const { data: { session }, error } = await supabase.auth.getSession()
-    if(!error && session) {
-        currentUser = session.user
-        atualizarUI()
-    } else {
-        configurarDemonstracao();
-    }
+async function loadSession() {
+
+const {
+    data: { session }
+} = await supabase.auth.getSession()
+
+if(session) {
+currentUser = session.user
+updateUI()
 }
 
-function configurarDemonstracao() {
-    // Se o Supabase estiver em branco, injeta scripts falsos para testes na aba de produtos e downloads
-    const grid = document.getElementById('produtos-grid')
-    grid.innerHTML = `
-        <div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden card-hover shadow-xl flex flex-col justify-between">
-            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=400" class="w-full h-48 object-cover">
-            <div class="p-5">
-                <h3 class="text-xl font-bold mb-1">Painel de Login Avançado (MTA)</h3>
-                <p class="text-purple-400 text-3xl font-black mt-2">€15.00</p>
-            </div>
-            <div class="p-5 pt-0"><button onclick="alert('Configura o teu Supabase para ativar as compras reais!')" class="gradient px-4 py-3 rounded-xl w-full font-bold">Comprar Script</button></div>
-        </div>
-    `
-    const area = document.getElementById('downloads-area')
-    area.innerHTML = '<div class="p-6 bg-gray-900 border border-gray-800 rounded-xl text-gray-400 text-center"><i class="fa-solid fa-lock text-xl mb-2 block text-purple-400"></i> Cria uma conta ou faz login para veres os teus ficheiros na Área de Cliente.</div>'
+showTab()
 }
 
-function atualizarUI() {
-    if(!currentUser) return
-    const authArea = document.getElementById('auth-area')
-    authArea.innerHTML = `
-        <div class="flex items-center gap-3">
-            <span class="text-sm text-gray-400"><i class="fa-solid fa-circle-user text-purple-400"></i> ${currentUser.email}</span>
-            <button onclick="fazerLogout()" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors">Sair</button>
-        </div>`
+function updateUI() {
 
-    if(currentUser.email === ADMIN_EMAIL) {
-        document.getElementById('admin-menu').classList.remove('hidden')
-    }
-    carregarDownloadsCliente()
+if(!currentUser) return
+
+const auth = document.getElementById('auth-area')
+
+auth.innerHTML = `
+<button onclick="logout()" class="bg-red-600 px-4 py-2 rounded-lg">
+Logout
+</button>
+`
+
+document.getElementById('cliente-menu').classList.remove('hidden')
+
+if(currentUser.email === ADMIN_EMAIL) {
+document.getElementById('admin-menu').classList.remove('hidden')
 }
 
-// PROCESSAMENTO DE LOGIN REAL
-document.getElementById('login-form').addEventListener('submit', async (e) => {
-    e.preventDefault()
-    if(!supabase) { alert('Aviso: Tens de inserir as tuas chaves do Supabase no código para fazeres login real!'); return; }
-    
-    const email = document.getElementById('email').value
-    const password = document.getElementById('password').value
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+loadDownloads()
+}
 
-    if(error) { alert("Erro de Login: " + error.message); return; }
-    await supabase.from('profiles').upsert({ id: data.user.id, email: data.user.email })
-    location.reload()
+const loginForm = document.getElementById('login-form')
+
+loginForm.addEventListener('submit', async (e) => {
+
+ e.preventDefault()
+
+ const email = document.getElementById('email').value
+ const password = document.getElementById('password').value
+
+ const { error } = await supabase.auth.signInWithPassword({
+ email,
+ password
+ })
+
+ if(error) {
+ alert(error.message)
+ return
+ }
+
+ location.reload()
 })
 
-// PROCESSAMENTO DE REGISTO REAL
-document.getElementById('register-form').addEventListener('submit', async (e) => {
-    e.preventDefault()
-    if(!supabase) { alert('Aviso: Tens de inserir as tuas chaves do Supabase no código para criares contas!'); return; }
+const registerBtn = document.getElementById('register-btn')
 
-    const email = document.getElementById('reg-email').value
-    const password = document.getElementById('reg-password').value
-    const { data, error } = await supabase.auth.signUp({ email, password })
+registerBtn.addEventListener('click', async () => {
 
-    if(error) { alert("Erro de Registo: " + error.message); return; }
-    if(data && data.user) {
-        await supabase.from('profiles').insert([{ id: data.user.id, email: email }])
-        alert('Conta registada com sucesso! Já podes fazer login.')
-        toggleAuthForm(true)
-    }
+const email = document.getElementById('email').value
+const password = document.getElementById('password').value
+
+const { error } = await supabase.auth.signUp({
+email,
+password
 })
 
-async function fazerLogout() {
-    if(supabase) await supabase.auth.signOut()
-    location.reload()
+if(error) {
+alert(error.message)
+return
 }
 
-async function carregarProdutosReais() {
-    if(!supabase) return
-    const { data } = await supabase.from('products').select('*')
-    const grid = document.getElementById('produtos-grid')
-    if(!data || data.length === 0) {
-        grid.innerHTML = '<p class="text-gray-500 col-span-3 text-center py-8">Nenhum produto cadastrado no teu Supabase.</p>'
-        return
-    }
-    grid.innerHTML = ''
-    data.forEach(p => {
-        grid.innerHTML += `
-        <div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden card-hover shadow-xl flex flex-col justify-between">
-            <img src="${p.image || 'https://via.placeholder.com/400x225'}" class="w-full h-48 object-cover">
-            <div class="p-5 flex-1">
-                <h3 class="text-xl font-bold">${p.name}</h3>
-                <p class="text-purple-400 text-3xl font-black mt-2">€${p.price}</p>
-            </div>
-            <div class="p-5 pt-0"><button onclick="comprarScriptReal(${p.id})" class="gradient px-4 py-3 rounded-xl w-full font-bold">Comprar Script</button></div>
-        </div>`
-    })
+alert('Conta criada!')
+})
+
+async function logout() {
+await supabase.auth.signOut()
+location.reload()
 }
 
-async function carregarDownloadsCliente() {
-    if(!supabase || !currentUser) return
-    const { data } = await supabase.from('purchases').select(`*, products(*)`).eq('user_id', currentUser.id)
-    const area = document.getElementById('downloads-area')
-    
-    if(!data || data.length === 0) {
-        area.innerHTML = '<div class="p-6 bg-gray-900 border border-gray-800 rounded-xl text-gray-400 text-center"><i class="fa-solid fa-folder-open text-2xl mb-2 text-gray-600 block"></i> Ainda não tens scripts comprados na tua conta.</div>'
-        return
-    }
-    area.innerHTML = ''
-    data.forEach(item => {
-        if(!item.products) return
-        area.innerHTML += `
-        <div class="bg-gray-900 border border-gray-800 p-5 rounded-xl flex justify-between items-center card-hover">
-            <div>
-                <h3 class="font-bold text-xl">${item.products.name}</h3>
-                <p class="text-green-400 text-sm flex items-center gap-1"><i class="fa-solid fa-check text-xs"></i> Disponível para Download</p>
-            </div>
-            <a href="${item.products.download}" target="_blank" class="gradient px-5 py-2.5 rounded-xl font-bold text-sm">Download (.zip)</a>
-        </div>`
-    })
+async function loadProdutos() {
+
+const { data } = await supabase
+.from('products')
+.select('*')
+
+const grid = document.getElementById('produtos-grid')
+
+grid.innerHTML = ''
+
+if(!data) return
+
+data.forEach(produto => {
+
+grid.innerHTML += `
+<div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+<img src="${produto.image}" class="w-full h-48 object-cover">
+
+<div class="p-4">
+<h3 class="text-xl font-bold mb-2">${produto.name}</h3>
+<p class="text-purple-400 text-2xl font-black mb-4">€${produto.price}</p>
+
+<button onclick="comprarProduto(${produto.id})"
+class="gradient px-4 py-2 rounded-lg w-full">
+Comprar
+</button>
+</div>
+</div>
+`
+})
 }
 
-// Iniciar a aplicação
-verificarSessao()
-carregarProdutosReais()
+async function adicionarProduto() {
+
+const name = document.getElementById('produto-nome').value
+const price = document.getElementById('produto-preco').value
+const image = document.getElementById('produto-imagem').value
+const download = document.getElementById('produto-download').value
+
+const { error } = await supabase
+.from('products')
+.insert([
+{
+name,
+price,
+image,
+download
+}
+])
+
+if(error) {
+alert(error.message)
+return
+}
+
+alert('Produto adicionado!')
+loadProdutos()
+}
+
+async function atribuirProduto() {
+
+const email = document.getElementById('cliente-email').value
+const productId = document.getElementById('produto-id').value
+
+const {
+ data: userData
+} = await supabase
+.from('profiles')
+.select('*')
+.eq('email', email)
+.single()
+
+if(!userData) {
+alert('Cliente não encontrado')
+return
+}
+
+await supabase
+.from('purchases')
+.insert([
+{
+user_id: userData.id,
+product_id: productId
+}
+])
+
+alert('Produto atribuído!')
+}
+
+async function loadDownloads() {
+
+if(!currentUser) return
+
+const {
+ data
+} = await supabase
+.from('purchases')
+.select(`
+*,
+products(*)
+`)
+.eq('user_id', currentUser.id)
+
+const area = document.getElementById('downloads-area')
+
+area.innerHTML = ''
+
+if(!data) return
+
+data.forEach(item => {
+
+area.innerHTML += `
+<div class="bg-gray-900 border border-gray-800 p-4 rounded-xl flex justify-between items-center">
+<div>
+<h3 class="font-bold text-xl">${item.products.name}</h3>
+<p class="text-gray-400">Download disponível</p>
+</div>
+
+<a href="${item.products.download}"
+target="_blank"
+class="gradient px-4 py-2 rounded-lg">
+Download
+</a>
+</div>
+`
+})
+}
+
+async function comprarProduto(id) {
+
+if(!currentUser) {
+window.location.hash = '#login'
+return
+}
+
+await supabase
+.from('purchases')
+.insert([
+{
+user_id: currentUser.id,
+product_id: id
+}
+])
+
+alert('Produto comprado!')
+}
+
+loadSession()
+loadProdutos()
+showTab()
+
 </script>
+
 </body>
 </html>
