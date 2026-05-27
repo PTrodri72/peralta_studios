@@ -117,8 +117,8 @@ Entrar / Registar
     <div class="max-w-5xl mx-auto px-6 py-16 text-center">
         <div class="bg-gradient-to-r from-purple-900/20 to-indigo-900/20 border border-purple-500/20 rounded-2xl p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-                <h3 class="text-4xl font-black text-purple-500 mb-1" id="count-clientes">0</h3>
-                <p class="text-gray-400 uppercase tracking-wider text-xs font-bold">Clientes Felizes</p>
+                <h3 class="text-4xl font-black text-purple-500 mb-1" id="count-clientes">Carregando...</h3>
+                <p class="text-gray-400 uppercase tracking-wider text-xs font-bold">Clientes Registados</p>
             </div>
             <div>
                 <h3 class="text-4xl font-black text-purple-500 mb-1">+50</h3>
@@ -185,7 +185,7 @@ Entrar / Registar
                 <label class="text-xs font-bold uppercase text-gray-400 block mb-1">Password</label>
                 <input id="password" type="password" required placeholder="••••••••" class="w-full p-3 rounded-xl bg-gray-800 border border-gray-700 focus:outline-none focus:border-purple-500 transition-colors">
             </div>
-            <button class="gradient w-full py-3.5 rounded-xl font-bold text-white shadow-lg shadow-purple-500/20 mt-2">
+            <button type="submit" class="gradient w-full py-3.5 rounded-xl font-bold text-white shadow-lg shadow-purple-500/20 mt-2">
                 Entrar na Loja
             </button>
         </form>
@@ -207,7 +207,7 @@ Entrar / Registar
                 <label class="text-xs font-bold uppercase text-gray-400 block mb-1">Password</label>
                 <input id="reg-password" type="password" required placeholder="Mínimo 6 caracteres" class="w-full p-3 rounded-xl bg-gray-800 border border-gray-700 focus:outline-none focus:border-purple-500 transition-colors">
             </div>
-            <button class="gradient w-full py-3.5 rounded-xl font-bold text-white shadow-lg shadow-purple-500/20 mt-2">
+            <button type="submit" class="gradient w-full py-3.5 rounded-xl font-bold text-white shadow-lg shadow-purple-500/20 mt-2">
                 Finalizar Registo
             </button>
         </form>
@@ -250,6 +250,7 @@ Entrar / Registar
 </section>
 
 <script>
+// Lembra-te de alterar estas duas credenciais com os dados corretos do teu projeto Supabase
 const supabaseUrl = 'YOUR_SUPABASE_URL'
 const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'
 
@@ -257,7 +258,7 @@ const supabase = window.supabase.createClient(supabaseUrl, supabaseKey)
 const ADMIN_EMAIL = 'igor.rodrigues2120@gmail.com'
 let currentUser = null
 
-// Alternar visualmente entre Login e Registo de forma limpa
+// Alternar visualmente entre Login e Registo
 function toggleAuthForm(showLogin) {
     const loginBox = document.getElementById('box-login');
     const registerBox = document.getElementById('box-register');
@@ -302,39 +303,41 @@ function showTab() {
 
 window.addEventListener('hashchange', showTab)
 
+// Carrega dados da sessão atual
 async function loadSession() {
-    const { data: { session } } = await supabase.auth.getSession()
-    if(session) {
+    const { data: { session }, error } = await supabase.auth.getSession()
+    if(!error && session) {
         currentUser = session.user
         updateUI()
     }
-    await getTotalUsers() // Carrega o total real de utilizadores para o painel Inicial
+    await getTotalUsers()
     showTab()
 }
 
-// Puxa a contagem de perfis do Supabase para o contador "Clientes Felizes"
+// Procura a contagem de perfis reais guardados na tabela `profiles`
 async function getTotalUsers() {
     try {
         const { count, error } = await supabase
           .from('profiles')
           .select('*', { count: 'exact', head: true })
         
-        if(!error && count) {
+        if(!error && count !== null) {
             document.getElementById('count-clientes').innerText = count;
         } else {
-            document.getElementById('count-clientes').innerText = "124"; // Fallback fictício caso a tabela não exista ainda
+            document.getElementById('count-clientes').innerText = "0";
         }
     } catch(e) {
-        document.getElementById('count-clientes').innerText = "124";
+        document.getElementById('count-clientes').innerText = "0";
     }
 }
 
+// Atualiza os botões de login/logout e menus visíveis
 function updateUI() {
     if(!currentUser) return
 
     const auth = document.getElementById('auth-area')
     auth.innerHTML = `
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 animate__animated animate__fadeIn">
             <span class="text-sm text-gray-400 hidden md:inline"><i class="fa-solid fa-user text-purple-400 mr-1"></i> ${currentUser.email}</span>
             <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
                 Sair
@@ -351,48 +354,64 @@ function updateUI() {
     loadDownloads()
 }
 
-// Evento de Login Completo
+// LOGIN 100% FUNCIONAL
 document.getElementById('login-form').addEventListener('submit', async (e) => {
     e.preventDefault()
     const email = document.getElementById('email').value
     const password = document.getElementById('password').value
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
 
     if(error) {
         alert("Erro ao entrar: " + error.message)
         return
     }
+
+    // Garante que o perfil do utilizador existe na tabela `profiles` ao fazer login
+    await supabase.from('profiles').upsert({ id: data.user.id, email: data.user.email })
+
+    window.location.hash = '#inicio'
     location.reload()
 })
 
-// Evento de Registo Completo
+// REGISTO 100% FUNCIONAL (Cria conta no Auth e cria o perfil na Base de Dados automaticamente)
 document.getElementById('register-form').addEventListener('submit', async (e) => {
     e.preventDefault()
     const email = document.getElementById('reg-email').value
     const password = document.getElementById('reg-password').value
 
-    const { error } = await supabase.auth.signUp({ email, password })
+    // 1. Cria o utilizador na autenticação do Supabase
+    const { data, error } = await supabase.auth.signUp({ email, password })
 
     if(error) {
         alert("Erro ao criar conta: " + error.message)
         return
     }
-    alert('Conta criada com sucesso! Já podes iniciar sessão.')
-    toggleAuthForm(true)
+
+    if(data && data.user) {
+        // 2. Insere na tabela 'profiles' para que o admin consiga localizá-lo por email mais tarde
+        await supabase.from('profiles').insert([{ id: data.user.id, email: email }])
+        
+        alert('Conta criada com sucesso! Já podes iniciar sessão.')
+        toggleAuthForm(true)
+    } else {
+        alert('Registo efetuado. Se tiveres a confirmação por email ativa no Supabase, verifica a tua caixa de correio.')
+    }
 })
 
 async function logout() {
     await supabase.auth.signOut()
+    window.location.hash = '#inicio'
     location.reload()
 }
 
+// CARREGAR PRODUTOS DA LOJA
 async function loadProdutos() {
-    const { data } = await supabase.from('products').select('*')
+    const { data, error } = await supabase.from('products').select('*')
     const grid = document.getElementById('produtos-grid')
     grid.innerHTML = ''
 
-    if(!data || data.length === 0) {
+    if(error || !data || data.length === 0) {
         grid.innerHTML = '<p class="text-gray-500 col-span-3 text-center py-8">Nenhum produto em stock de momento.</p>'
         return
     }
@@ -421,11 +440,17 @@ async function loadProdutos() {
     })
 }
 
+// ADICIONAR PRODUTOS (PAINEL ADMIN)
 async function adicionarProduto() {
     const name = document.getElementById('produto-nome').value
     const price = document.getElementById('produto-preco').value
     const image = document.getElementById('produto-imagem').value
     const download = document.getElementById('produto-download').value
+
+    if(!name || !price || !download) {
+        alert('Por favor, preenche pelo menos o Nome, Preço e URL de Download.');
+        return;
+    }
 
     const { error } = await supabase.from('products').insert([{ name, price, image, download }])
 
@@ -437,28 +462,42 @@ async function adicionarProduto() {
     loadProdutos()
 }
 
+// ATRIBUIR PRODUTO A UM CLIENTE POR EMAIL (PAINEL ADMIN)
 async function atribuirProduto() {
     const email = document.getElementById('cliente-email').value
     const productId = document.getElementById('produto-id').value
 
-    const { data: userData } = await supabase.from('profiles').select('*').eq('email', email).single()
+    if(!email || !productId) {
+        alert('Preenche o email do cliente e o ID do produto.');
+        return;
+    }
 
-    if(!userData) {
-        alert('Cliente não encontrado na tabela profiles.')
+    // Localiza o UUID do utilizador através do email na tabela 'profiles'
+    const { data: userData, error: userError } = await supabase.from('profiles').select('*').eq('email', email).maybeSingle()
+
+    if(userError || !userData) {
+        alert('Cliente não encontrado na tabela profiles. Certifica-te de que o cliente já fez login ou registo na loja pelo menos uma vez.');
         return
     }
 
-    await supabase.from('purchases').insert([{ user_id: userData.id, product_id: productId }])
-    alert('Produto atribuído com sucesso!')
+    const { error: purchaseError } = await supabase.from('purchases').insert([{ user_id: userData.id, product_id: productId }])
+    
+    if(purchaseError) {
+        alert('Erro ao atribuir: ' + purchaseError.message);
+        return;
+    }
+
+    alert('Produto atribuído com sucesso!');
 }
 
+// CARREGAR DOWNLOADS ADQUIRIDOS (ÁREA DO CLIENTE)
 async function loadDownloads() {
     if(!currentUser) return
-    const { data } = await supabase.from('purchases').select(`*, products(*)`).eq('user_id', currentUser.id)
+    const { data, error } = await supabase.from('purchases').select(`*, products(*)`).eq('user_id', currentUser.id)
     const area = document.getElementById('downloads-area')
     area.innerHTML = ''
 
-    if(!data || data.length === 0) {
+    if(error || !data || data.length === 0) {
         area.innerHTML = '<div class="p-6 bg-gray-900 border border-gray-800 rounded-xl text-gray-400 text-center"><i class="fa-solid fa-folder-open text-2xl mb-2 block"></i> Ainda não tens nenhum recurso comprado.</div>'
         return
     }
@@ -466,7 +505,7 @@ async function loadDownloads() {
     data.forEach(item => {
         if(!item.products) return
         area.innerHTML += `
-        <div class="bg-gray-900 border border-gray-800 p-5 rounded-xl flex justify-between items-center card-hover">
+        <div class="bg-gray-900 border border-gray-800 p-5 rounded-xl flex justify-between items-center card-hover animate__animated animate__fadeInUp">
             <div class="flex items-center gap-4">
                 <div class="bg-purple-600/10 p-3 rounded-lg text-purple-400">
                     <i class="fa-solid fa-file-code text-2xl"></i>
@@ -484,17 +523,25 @@ async function loadDownloads() {
     })
 }
 
+// COMPRAR PRODUTO DIRECTAMENTE
 async function comprarProduto(id) {
     if(!currentUser) {
         window.location.hash = '#login'
         return
     }
 
-    await supabase.from('purchases').insert([{ user_id: currentUser.id, product_id: id }])
-    alert('Produto adicionado à tua conta cliente com sucesso!')
+    const { error } = await supabase.from('purchases').insert([{ user_id: currentUser.id, product_id: id }])
+    
+    if(error) {
+        alert("Erro ao processar compra: " + error.message)
+        return
+    }
+
+    alert('Produto adquirido! Ele já se encontra disponível na tua Área Cliente.')
     loadDownloads()
 }
 
+// Inicialização da aplicação
 loadSession()
 loadProdutos()
 showTab()
