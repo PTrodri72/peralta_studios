@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustStore MTA | A Tua Loja de Scripts</title>
+    <!-- Tailwind CSS para um design moderno e rápido -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #0b0f19; color: #f3f4f6; }
+        .purple-gradient { background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%); }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <!-- MENU DE NAVEGAÇÃO -->
+    <nav class="border-b border-gray-800 bg-gray-900 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-store text-purple-500 text-2xl"></i>
+                    <span class="text-xl font-bold tracking-wider uppercase text-white">TrustStore <span class="text-purple-500">MTA</span></span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-gray-300 hover:text-purple-400 transition">Início</a>
+                    <a href="#" class="text-gray-300 hover:text-purple-400 transition">Scripts</a>
+                    <a href="#" class="text-gray-300 hover:text-purple-400 transition">Sistemas VIPS</a>
+                    <a href="#" class="text-gray-300 hover:text-purple-400 transition">Suporte</a>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="relative text-gray-300 hover:text-white transition">
+                        <i class="fa-solid fa-basket-shopping text-xl"></i>
+                        <span class="absolute -top-2 -right-2 bg-purple-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
+                    </button>
+                    <button class="purple-gradient hover:opacity-90 text-white px-4 py-2 rounded-md font-medium transition text-sm">
+                        Entrar / Registar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- BANNER PRINCIPAL -->
+    <header class="relative overflow-hidden py-20 border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight mb-4">
+                Eleva o nível do teu servidor de <span class="text-purple-500">MTA</span>
+            </h1>
+            <p class="max-w-2xl mx-auto text-gray-400 text-lg mb-8">
+                Scripts otimizados, painéis modernos e sistemas exclusivos com entrega 100% automática e segura.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#produtos" class="purple-gradient px-6 py-3 rounded-lg font-semibold text-white shadow-lg hover:shadow-purple-500/20 transition">Ver Catálogo</a>
+                <a href="#" class="bg-gray-800 hover:bg-gray-700 px-6 py-3 rounded-lg font-semibold text-white transition border border-gray-700">Comunidade Discord</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- VITRINE DE PRODUTOS -->
+    <main id="produtos" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-4">
+            <div>
+                <h2 class="text-2xl font-bold text-white mb-2">Recursos em Destaque</h2>
+                <p class="text-gray-400 text-sm">Os scripts mais procurados e bem avaliados do momento.</p>
+            </div>
+            <!-- Filtros básicos -->
+            <div class="flex gap-2 overflow-x-auto pb-2">
+                <button class="bg-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap">Todos</button>
+                <button class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap">Corporações</button>
+                <button class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap">Painéis HUD</button>
+                <button class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap">Sistemas VIP</button>
+            </div>
+        </div>
+
+        <!-- Grelha de Produtos (Exemplo de 3 Produtos) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <!-- Produto 1 -->
+            <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition group flex flex-col justify-between">
+                <div>
+                    <div class="relative bg-gray-800 aspect-video flex items-center justify-center">
+                        <!-- Imagem Temporária (Substituir por print do script) -->
+                        <i class="fa-solid fa-code text-5xl text-gray-600 group-hover:text-purple-400 transition"></i>
+                        <span class="absolute top-3 right-3 bg-green-500 text-xs text-black font-bold px-2 py-1 rounded">Entrega Instantânea</span>
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs text-purple-400 font-bold tracking-wider uppercase">Painel / HUD</span>
+                        <h3 class="text-xl font-bold text-white mt-1 mb-2">Concessionária Avançada v2.0</h3>
+                        <p class="text-gray-400 text-sm line-clamp-2">Painel totalmente em DX, com sistema de test-drive, financiamento e tunagem integrada para servidores de Roleplay.</p>
+                    </div>
+                </div>
+                <div class="p-6 pt-0">
+                    <div class="border-t border-gray-800 pt-4 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs text-gray-500 block">Preço único</span>
+                            <span class="text-2xl font-black text-white">14.99€</span>
+                        </div>
+                        <button class="bg-gray-800 hover:bg-purple-600 text-white font-medium px-4 py-2 rounded-lg transition text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-cart-plus"></i> Comprar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Produto 2 -->
+            <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition group flex flex-col justify-between">
+                <div>
+                    <div class="relative bg-gray-800 aspect-video flex items-center justify-center">
+                        <i class="fa-solid fa-shield-halved text-5xl text-gray-600 group-hover:text-purple-400 transition"></i>
+                        <span class="absolute top-3 right-3 bg-purple-500 text-xs text-white font-bold px-2 py-1 rounded">Mais Vendido</span>
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs text-purple-400 font-bold tracking-wider uppercase">Sistemas</span>
+                        <h3 class="text-xl font-bold text-white mt-1 mb-2">Sistema de Inventário por Peso</h3>
+                        <p class="text-gray-400 text-sm line-clamp-2">Inventário moderno estilo FiveM com sistema de drop de itens no chão, armas com munições reais e uso de consumíveis.</p>
+                    </div>
+                </div>
+                <div class="p-6 pt-0">
+                    <div class="border-t border-gray-800 pt-4 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs text-gray-500 block">Preço único</span>
+                            <span class="text-2xl font-black text-white">19.99€</span>
+                        </div>
+                        <button class="bg-gray-800 hover:bg-purple-600 text-white font-medium px-4 py-2 rounded-lg transition text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-cart-plus"></i> Comprar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Produto 3 -->
+            <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-purple-500/50 transition group flex flex-col justify-between">
+                <div>
+                    <div class="relative bg-gray-800 aspect-video flex items-center justify-center">
+                        <i class="fa-solid fa-gavel text-5xl text-gray-600 group-hover:text-purple-400 transition"></i>
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs text-purple-400 font-bold tracking-wider uppercase">Corporações</span>
+                        <h3 class="text-xl font-bold text-white mt-1 mb-2">Sistema de Polícia com MDT</h3>
+                        <p class="text-gray-400 text-sm line-clamp-2">Computador de bordo para viaturas policiais. Registo de multas, mandados de captura e consulta de fichas criminais em tempo real.</p>
+                    </div>
+                </div>
+                <div class="p-6 pt-0">
+                    <div class="border-t border-gray-800 pt-4 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs text-gray-500 block">Preço único</span>
+                            <span class="text-2xl font-black text-white">9.99€</span>
+                        </div>
+                        <button class="bg-gray-800 hover:bg-purple-600 text-white font-medium px-4 py-2 rounded-lg transition text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-cart-plus"></i> Comprar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- RODAPÉ (FOOTER) -->
+    <footer class="bg-gray-950 border-t border-gray-800 py-8 text-center text-sm text-gray-500">
+        <p>&copy; 2026 TrustStore MTA. Todos os direitos reservados.</p>
+        <p class="mt-2 text-xs text-gray-600">Não temos afiliação direta com a Rockstar Games ou com o projeto Multi Theft Auto.</p>
+    </footer>
+
+</body>
+</html>
