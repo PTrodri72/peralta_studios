@@ -3,221 +3,637 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sua Loja MTA | Mods, Mapas e Sistemas</title>
-    <!-- Tailwind CSS para o Design Moderno -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome para os Ícones -->
+    <title>Trust Store | Mapas e Resources para MTA:SA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
+        /* CONFIGURAÇÕES GERAIS / PALETA DE CORES */
+        :root {
+            --bg-principal: #0b111e;
+            --bg-card: #131b2e;
+            --cor-primaria: #f39c12;
+            --cor-primaria-hover: #d35400;
+            --texto-claro: #ffffff;
+            --texto-mutado: #8a99ad;
+            --borda: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
         body {
-            background-color: #0b0c10;
-            color: #c5c6c7;
-            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-principal);
+            color: var(--texto-claro);
+            overflow-x: hidden;
         }
-        .glow-effect {
-            box-shadow: 0 0 15px rgba(0, 191, 255, 0.2);
+
+        a {
+            text-decoration: none;
+            color: inherit;
         }
-        .glow-text {
-            text-shadow: 0 0 10px rgba(0, 191, 255, 0.6);
+
+        /* CABEÇALHO (NAVBAR) */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background-color: rgba(11, 17, 30, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--borda);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .logo span {
+            color: var(--cor-primaria);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav ul li a {
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--cor-primaria);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .btn-login {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .cart-icon {
+            position: relative;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background-color: var(--cor-primaria);
+            color: #000;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+
+        /* SEÇÃO HERO */
+        .hero-container {
+            padding: 60px 8% 40px 8%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .announcement {
+            background-color: rgba(243, 156, 18, 0.1);
+            border: 1px solid rgba(243, 156, 18, 0.2);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 25px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .announcement i {
+            color: var(--cor-primaria);
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .hero-content h1 span {
+            color: var(--cor-primaria);
+        }
+
+        .hero-content p {
+            color: var(--texto-mutado);
+            max-width: 500px;
+            font-size: 15px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .btn-principal {
+            background-color: var(--cor-primaria);
+            color: #000;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-weight: 600;
+            display: inline-block;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .btn-principal:hover {
+            background-color: var(--cor-primaria-hover);
+            transform: translateY(-2px);
+        }
+
+        /* REDES SOCIAIS NA HERO */
+        .social-hero {
+            position: absolute;
+            right: 8%;
+            top: 40%;
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-hero a {
+            width: 45px;
+            height: 45px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--borda);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            color: var(--texto-claro);
+            transition: 0.3s;
+        }
+
+        .social-hero a:hover {
+            background-color: var(--cor-primaria);
+            color: #000;
+            transform: translateY(-3px);
+        }
+
+        /* CONTEXTO / ESTATÍSTICAS */
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin: 60px 0;
+            padding: 30px;
+            border-top: 1px solid var(--borda);
+            border-bottom: 1px solid var(--borda);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-icon {
+            font-size: 28px;
+            color: var(--cor-primaria);
+        }
+
+        .stat-info h3 {
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .stat-info p {
+            color: var(--texto-mutado);
+            font-size: 13px;
+        }
+
+        /* ESTRUTURA DA LOJA (PRODUTOS + CARRINHO) */
+        .loja-secao {
+            padding: 20px 8% 80px 8%;
+        }
+
+        /* BARRA DE FILTROS */
+        .filtros-bar {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 20px;
+            background-color: var(--bg-card);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--borda);
+            margin-bottom: 40px;
+            align-items: center;
+        }
+
+        .filtro-grupo {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filtro-grupo label {
+            font-size: 12px;
+            color: var(--texto-mutado);
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            background-color: var(--bg-principal);
+            border: 1px solid var(--borda);
+            padding: 10px 15px;
+            border-radius: 6px;
+            color: #fff;
+            outline: none;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--texto-mutated);
+        }
+
+        .filtro-grupo select {
+            background-color: var(--bg-principal);
+            border: 1px solid var(--borda);
+            padding: 10px 15px;
+            border-radius: 6px;
+            color: #fff;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* LAYOUT PRINCIPAL DO CONTEÚDO */
+        .conteudo-loja {
+            display: grid;
+            grid-template-columns: 3fr 1.3fr;
+            gap: 30px;
+        }
+
+        /* GRID DE PRODUTOS */
+        .produtos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .produto-card {
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            border: 1px solid var(--borda);
+            overflow: hidden;
+            transition: transform 0.3s, border-color 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .produto-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(243, 156, 18, 0.3);
+        }
+
+        .produto-img {
+            width: 100%;
+            height: 160px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .tag-lancamento {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: var(--cor-primaria);
+            color: #000;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .produto-corpo {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .produto-corpo h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .produto-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .produto-preco {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--cor-primaria);
+        }
+
+        .btn-comprar {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--borda);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-comprar:hover {
+            background-color: var(--cor-primaria);
+            color: #000;
+            border-color: var(--cor-primaria);
+        }
+
+        /* SIDEBAR DO CARRINHO */
+        .sidebar-carrinho {
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            border: 1px solid var(--borda);
+            padding: 25px;
+            height: fit-content;
+        }
+
+        .carrinho-titulo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .carrinho-titulo i {
+            color: var(--cor-primaria);
+        }
+
+        .carrinho-vazio {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--texto-mutado);
+        }
+
+        .carrinho-vazio i {
+            font-size: 40px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .carrinho-vazio p {
+            font-size: 13px;
+        }
+
+        /* FOOTER / PARCEIROS */
+        .parceiros-secao {
+            text-align: center;
+            padding: 40px 8%;
+            border-top: 1px solid var(--borda);
+        }
+
+        .parceiros-secao h2 {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .parceiros-secao h2 span {
+            color: var(--cor-primaria);
+        }
+
+        .parceiros-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            opacity: 0.6;
+        }
+
+        .parceiros-logos font {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+
+        /* RESPONSIVIDADE */
+        @media (max-width: 992px) {
+            .conteudo-loja {
+                grid-template-columns: 1fr;
+            }
+            .social-hero {
+                position: static;
+                margin-top: 20px;
+            }
+            .filtros-bar {
+                grid-template-columns: 1fr;
+            }
+            .stats-container {
+                flex-direction: column;
+                gap: 30px;
+                align-items: center;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- BARRA DE NAVEGAÇÃO (HEADER) -->
-    <header class="border-b border-gray-800 bg-[#0f111a] sticky top-0 z-50">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <!-- Logo -->
-            <a href="#" class="text-2xl font-black text-white tracking-wider flex items-center gap-2">
-                <i class="fa-solid fa-gamepad text-cyan-400"></i> STORE<span class="text-cyan-400">MTA</span>
-            </a>
-            
-            <!-- Menu de Links -->
-            <nav class="hidden md:flex space-x-8 font-medium">
-                <a href="#" class="text-white hover:text-cyan-400 transition">Início</a>
-                <a href="#produtos" class="hover:text-white transition">Produtos</a>
-                <a href="#recursos" class="hover:text-white transition">Vantagens</a>
-                <a href="https://discord.gg/seu-convite" target="_blank" class="hover:text-white transition text-[#5865F2]"><i class="fa-brands fa-discord"></i> Discord</a>
-            </nav>
-
-            <!-- Botão de Login Discord -->
-            <div>
-                <a href="https://discord.com/api/oauth2/authorize..." class="bg-[#5865F2] hover:bg-[#4752C4] text-white font-semibold px-5 py-2.5 rounded-lg flex items-center gap-2 transition glow-effect">
-                    <i class="fa-brands fa-discord text-lg"></i> Login com Discord
-                </a>
+    <header>
+        <div class="logo">
+            Trust <span>Store</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active">Página Inicial</a></li>
+                <li><a href="#">Loja</a></li>
+                <li><a href="#">Termos</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions">
+            <div class="btn-login">
+                <i class="fa-regular fa-user"></i> Fazer Login
+            </div>
+            <div class="cart-icon">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="cart-count">0</span>
             </div>
         </div>
     </header>
 
-    <!-- BANNER PRINCIPAL (HERO) -->
-    <section class="relative bg-gradient-to-b from-[#0f111a] to-[#0b0c10] py-24 text-center px-4">
-        <div class="max-w-3xl mx-auto">
-            <span class="bg-cyan-500/10 text-cyan-400 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full border border-cyan-500/20">Os Melhores Recursos para seu Servidor</span>
-            <h1 class="text-4xl md:text-6xl font-extrabold text-white mt-6 mb-4 tracking-tight">
-                Eleve o Nível do seu <span class="text-cyan-400 glow-text">MTA:SA</span>
-            </h1>
-            <p class="text-gray-400 text-lg md:text-xl mb-8">
-                Sistemas automatizados, scripts otimizados e mapas exclusivos com entrega instantânea logo após o pagamento.
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#produtos" class="bg-cyan-500 hover:bg-cyan-600 text-black font-bold px-8 py-3.5 rounded-lg transition text-lg shadow-lg shadow-cyan-500/20">
-                    Ver Catálogo
-                </a>
-                <a href="https://discord.gg/seu-convite" target="_blank" class="bg-gray-800 hover:bg-gray-700 text-white font-semibold px-8 py-3.5 rounded-lg transition text-lg border border-gray-700">
-                    Entrar no Discord
-                </a>
-            </div>
+    <section class="hero-container">
+        <div class="announcement">
+            <i class="fa-solid fa-bell"></i> NOVO LANÇAMENTO: PACK DE VEGETAÇÃO 🌿
+        </div>
+        <div class="hero-content">
+            <h1>Trust <span>Store</span></h1>
+            <p>Procurando mapas de qualidade? A Trust Store possui os melhores mapas a pronta entrega do MTA:SA.</p>
+            <a href="#loja" class="btn-principal">Ver Produtos</a>
+        </div>
+        <div class="social-hero">
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-discord"></i></a>
+            <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#"><i class="fa-brands fa-tiktok"></i></a>
         </div>
     </section>
 
-    <!-- SEÇÃO DE VANTAGENS -->
-    <section id="recursos" class="container mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-[#111420] p-6 rounded-xl border border-gray-800 flex items-start gap-4">
-            <div class="text-cyan-400 text-3xl"><i class="fa-solid fa-bolt"></i></div>
-            <div>
-                <h3 class="text-white font-bold text-lg mb-1">Entrega Automática</h3>
-                <p class="text-gray-400 text-sm">Pagou via PIX? O arquivo é liberado na sua conta no mesmo segundo.</p>
+    <div class="stats-container">
+        <div class="stat-item">
+            <div class="stat-icon"><i class="fa-regular fa-user"></i></div>
+            <div class="stat-info">
+                <h3>+2027</h3>
+                <p>clientes</p>
             </div>
         </div>
-        <div class="bg-[#111420] p-6 rounded-xl border border-gray-800 flex items-start gap-4">
-            <div class="text-cyan-400 text-3xl"><i class="fa-solid fa-shield-halved"></i></div>
-            <div>
-                <h3 class="text-white font-bold text-lg mb-1">Compra 100% Segura</h3>
-                <p class="text-gray-400 text-sm">Intermediação de pagamentos criptografada e segura para você.</p>
+        <div class="stat-item">
+            <div class="stat-icon"><i class="fa-solid fa-box-open"></i></div>
+            <div class="stat-info">
+                <h3>+73</h3>
+                <p>produtos</p>
             </div>
         </div>
-        <div class="bg-[#111420] p-6 rounded-xl border border-gray-800 flex items-start gap-4">
-            <div class="text-cyan-400 text-3xl"><i class="fa-solid fa-headset"></i></div>
-            <div>
-                <h3 class="text-white font-bold text-lg mb-1">Suporte Dedicado</h3>
-                <p class="text-gray-400 text-sm">Dúvidas na instalação dos scripts? Nossa equipe te ajuda no Discord.</p>
+        <div class="stat-item">
+            <div class="stat-icon"><i class="fa-solid fa-store"></i></div>
+            <div class="stat-info">
+                <h3>+4</h3>
+                <p>anos de loja</p>
             </div>
-        </div>
-    </section>
-
-    <!-- VITRINE DE PRODUTOS -->
-    <main id="produtos" class="container mx-auto px-6 py-16">
-        <div class="flex justify-between items-end mb-10">
-            <div>
-                <h2 class="text-3xl font-bold text-white tracking-tight">Produtos em Destaque</h2>
-                <p class="text-gray-400 text-sm mt-1">Scripts limpos, sem lag e fáceis de configurar.</p>
-            </div>
-        </div>
-
-        <!-- Grade de Produtos -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            <!-- PRODUTO 1 -->
-            <div class="bg-[#111420] rounded-xl overflow-hidden border border-gray-800 hover:border-cyan-500/40 transition group">
-                <div class="h-48 bg-gray-900 relative flex items-center justify-center overflow-hidden">
-                    <!-- Imagem Ilustrativa (Substitua o link do placeholder pela foto real do mod) -->
-                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80" alt="Mod MTA" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                    <span class="absolute top-3 right-3 bg-cyan-500 text-black text-xs font-bold px-2.5 py-1 rounded">SISTEMA</span>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-white mb-2">Sistema de Inventário Avançado v2</h3>
-                    <p class="text-gray-400 text-sm line-clamp-2 mb-4">
-                        Inventário totalmente em Dx, com sistema de drop de itens no chão, focado em alta otimização (0.00ms).
-                    </p>
-                    <div class="flex justify-between items-center pt-4 border-t border-gray-800">
-                        <div>
-                            <span class="text-gray-500 text-xs block line-through">R$ 50,00</span>
-                            <span class="text-2xl font-black text-white">R$ 29,90</span>
-                        </div>
-                        <button onclick="abrirCheckout('Sistema de Inventário', '29.90')" class="bg-cyan-500 hover:bg-cyan-600 text-black font-bold px-4 py-2 rounded-lg text-sm transition">
-                            <i class="fa-solid fa-cart-shopping mr-1"></i> Comprar
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PRODUTO 2 -->
-            <div class="bg-[#111420] rounded-xl overflow-hidden border border-gray-800 hover:border-cyan-500/40 transition group">
-                <div class="h-48 bg-gray-900 relative flex items-center justify-center overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=600&q=80" alt="Mod MTA" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                    <span class="absolute top-3 right-3 bg-purple-500 text-white text-xs font-bold px-2.5 py-1 rounded">MAPA</span>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-white mb-2">Concessionária Luxury (Favela)</h3>
-                    <p class="text-gray-400 text-sm line-clamp-2 mb-4">
-                        Mapa de concessionária super detalhado com texturas leves para não causar quedas de FPS nos seus jogadores.
-                    </p>
-                    <div class="flex justify-between items-center pt-4 border-t border-gray-800">
-                        <div>
-                            <span class="text-gray-500 text-xs block line-through">R$ 35,00</span>
-                            <span class="text-2xl font-black text-white">R$ 19,90</span>
-                        </div>
-                        <button onclick="abrirCheckout('Concessionária Luxury', '19.90')" class="bg-cyan-500 hover:bg-cyan-600 text-black font-bold px-4 py-2 rounded-lg text-sm transition">
-                            <i class="fa-solid fa-cart-shopping mr-1"></i> Comprar
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PRODUTO 3 -->
-            <div class="bg-[#111420] rounded-xl overflow-hidden border border-gray-800 hover:border-cyan-500/40 transition group">
-                <div class="h-48 bg-gray-900 relative flex items-center justify-center overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600&q=80" alt="Mod MTA" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                    <span class="absolute top-3 right-3 bg-cyan-500 text-black text-xs font-bold px-2.5 py-1 rounded">SISTEMA</span>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-white mb-2">Painel de Corporações (Polícia/FACC)</h3>
-                    <p class="text-gray-400 text-sm line-clamp-2 mb-4">
-                        Gerencie membros, dê cargos, gerencie o banco da corporação de forma 100% integrada com o painel administrativo.
-                    </p>
-                    <div class="flex justify-between items-center pt-4 border-t border-gray-800">
-                        <div>
-                            <span class="text-gray-500 text-xs block line-through">R$ 70,00</span>
-                            <span class="text-2xl font-black text-white">R$ 45,00</span>
-                        </div>
-                        <button onclick="abrirCheckout('Painel de Corporações', '45.00')" class="bg-cyan-500 hover:bg-cyan-600 text-black font-bold px-4 py-2 rounded-lg text-sm transition">
-                            <i class="fa-solid fa-cart-shopping mr-1"></i> Comprar
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </main>
-
-    <!-- POP-UP SIMULADO DE CHECKOUT -->
-    <div id="checkoutModal" class="fixed inset-0 bg-black/80 flex items-center justify-center hidden p-4 z-50">
-        <div class="bg-[#111420] border border-gray-800 p-6 rounded-xl max-w-sm w-full text-center">
-            <h3 class="text-xl font-bold text-white mb-2">Finalizar Pedido</h3>
-            <p id="modalProdutoNome" class="text-cyan-400 font-semibold mb-4"></p>
-            
-            <!-- Simulação do PIX -->
-            <div class="bg-white p-4 rounded-lg inline-block mb-4">
-                <!-- Código de exemplo para simular um QR Code -->
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=ExemploPixMTA" alt="QR Code Pix" class="w-36 h-36">
-            </div>
-            
-            <p class="text-gray-400 text-xs mb-4">Escaneie o QR Code acima para pagar via PIX. Após a aprovação, o download será iniciado automaticamente.</p>
-            
-            <button onclick="fecharCheckout()" class="bg-gray-800 hover:bg-gray-700 text-white w-full py-2 rounded-lg transition font-medium">
-                Cancelar
-            </button>
         </div>
     </div>
 
-    <!-- RODAPÉ (FOOTER) -->
-    <footer class="border-t border-gray-800 bg-[#0f111a] py-8 text-center text-sm text-gray-500">
-        <div class="container mx-auto px-6">
-            <p class="mb-2">&copy; 2026 StoreMTA. Todos os direitos reservados.</p>
-            <p>Este site não possui afiliação com a Rockstar Games ou Take-Two Interactive.</p>
+    <section class="loja-secao" id="loja">
+        
+        <div class="filtros-bar">
+            <div class="filtro-grupo">
+                <label>Pesquise um Produto</label>
+                <div class="search-box">
+                    <input type="text" placeholder="Pesquise aqui...">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+            </div>
+            <div class="filtro-grupo">
+                <label>Ordenar Produtos</label>
+                <select>
+                    <option>Mais Recentes</option>
+                    <option>Menor Preço</option>
+                    <option>Maior Preço</option>
+                </select>
+            </div>
+            <div class="filtro-grupo">
+                <label>Filtro de Valores</label>
+                <select>
+                    <option>Todos os valores</option>
+                    <option>Até R$ 30,00</option>
+                    <option>R$ 30,00 - R$ 50,00</option>
+                </select>
+            </div>
         </div>
-    </footer>
 
-    <!-- LOGICA DO SITE (JAVASCRIPT) -->
-    <script>
-        function abrirCheckout(nomeProduto, preco) {
-            document.getElementById('modalProdutoNome').innerText = nomeProduto + " - R$ " + preco;
-            document.getElementById('checkoutModal').classList.remove('hidden');
-        }
+        <div class="conteudo-loja">
+            
+            <div class="produtos-grid">
+                
+                <div class="produto-card">
+                    <div class="produto-img" style="background-image: url('https://via.placeholder.com/300x160');">
+                        <span class="tag-lancamento">Novo Lançamento</span>
+                    </div>
+                    <div class="produto-corpo">
+                        <h4>Pack de Vegetação</h4>
+                        <div class="produto-footer">
+                            <span class="produto-preco">R$ 30</span>
+                            <button class="btn-comprar">Adquirir Já</button>
+                        </div>
+                    </div>
+                </div>
 
-        function fecharCheckout() {
-            document.getElementById('checkoutModal').classList.add('hidden');
-        }
-    </script>
+                <div class="produto-card">
+                    <div class="produto-img" style="background-image: url('https://via.placeholder.com/300x160');"></div>
+                    <div class="produto-corpo">
+                        <h4>Posto de Gasolina (Remake)</h4>
+                        <div class="produto-footer">
+                            <span class="produto-preco">R$ 45</span>
+                            <button class="btn-comprar">Adquirir Já</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="produto-card">
+                    <div class="produto-img" style="background-image: url('https://via.placeholder.com/300x160');"></div>
+                    <div class="produto-corpo">
+                        <h4>Favela Versão 7.0</h4>
+                        <div class="produto-footer">
+                            <span class="produto-preco">R$ 40</span>
+                            <button class="btn-comprar">Adquirir Já</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="sidebar-carrinho">
+                <div class="carrinho-titulo">
+                    <i class="fa-solid fa-cart-shopping"></i> Carrinho
+                </div>
+                <div class="carrinho-vazio">
+                    <i class="fa-solid fa-cart-plus"></i>
+                    <p>Seu Carrinho está Vazio</p>
+                    <p style="color: var(--texto-mutado); font-size: 11px; margin-top: 5px;">Adicione um Produto ao carrinho para poder visualizá-lo aqui!</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="parceiros-secao">
+        <h2>🤝 Parceiros <span>Oficiais</span></h2>
+        <div class="parceiros-logos">
+            <font>MTAX</font>
+            <font>HS</font>
+            <font>MTAX</font>
+            <font>HS</font>
+        </div>
+    </section>
+
 </body>
 </html>
