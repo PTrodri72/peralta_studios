@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trust Store | Sistema de Licenciamento Supabase</title>
     
-    <!-- Ícones e Fontes Externas -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- CDN Oficial do SDK do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -195,7 +193,9 @@
         .main-promo-banner { 
             width: 100%; 
             height: 180px; 
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            background-image: url('{AABB5039-2A08-4B3A-81FE-DC2B32DC7A6E}.jpg');
+            background-size: cover;
+            background-position: center;
             border-radius: 8px; 
             border: 1px solid var(--borda); 
             display: flex;
@@ -207,6 +207,7 @@
             font-size: 26px;
             font-weight: 800;
             letter-spacing: 1px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.8);
         }
 
         .main-promo-banner h2 span {
@@ -245,12 +246,11 @@
         .item-banner { 
             width: 100%; 
             height: 140px; 
-            background-color: #1e293b;
+            background-size: cover;
+            background-position: center;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 30px;
-            color: rgba(255,255,255,0.1);
         }
 
         .item-info { 
@@ -505,16 +505,14 @@
 </head>
 <body>
 
-    <!-- Caixa do Toast Inteligente -->
     <div class="toast-notification" id="toast">
         <i class="fa-solid fa-circle-check" id="toast-icon" style="color: var(--sucesso)"></i>
         <span id="toast-text">Notificação Global</span>
     </div>
 
-    <!-- Barra de Navegação Superior -->
     <header>
         <div class="logo-container" onclick="switchTab('loja')">
-            <i class="fa-solid fa-bolt" style="color: var(--cor-primaria);"></i>
+            <div style="width: 35px; height: 35px; background-image: url('{65904B0D-BACA-4ABC-B10B-C0D7E90BDD53}.png'); background-size: contain; background-repeat: no-repeat; background-position: center;"></div>
             Trust <span>Store</span>
         </div>
         <nav>
@@ -525,7 +523,6 @@
         </nav>
         
         <div class="user-menu">
-            <!-- Renderizado se Logado -->
             <div id="session-logged" class="profile-wrapper">
                 <div class="profile-badge">
                     <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=100" alt="Avatar">
@@ -537,14 +534,12 @@
                     <a onclick="handleLogout()" style="border-top: 1px solid rgba(255,255,255,0.02);"><i class="fa-solid fa-arrow-right-from-bracket" style="color: #ff4757;"></i> Sair</a>
                 </div>
             </div>
-            <!-- Renderizado Deslogado -->
             <button id="session-anonymous" class="btn-discord-login" style="display: none;" onclick="handleDiscordLogin()">
                 <i class="fa-brands fa-discord"></i> Entrar com Discord
             </button>
         </div>
     </header>
 
-    <!-- ABA 1: INDEX DA LOJA -->
     <div id="tab-loja" class="tab-content active">
         <div class="shop-banner-container">
             <div class="main-promo-banner">
@@ -553,10 +548,9 @@
         </div>
         
         <div class="shop-workspace">
-            <!-- Grid de Produtos à Venda -->
             <div class="shop-items-grid">
                 <div class="card-item">
-                    <div class="item-banner"><i class="fa-solid fa-tree"></i></div>
+                    <div class="item-banner" style="background-image: url('{D877220A-E806-4972-AE21-B8C362B1A1A0}.png');"></div>
                     <div class="item-info">
                         <h4>Pack de Vegetação</h4>
                         <div class="price-tag">R$ 30,00</div>
@@ -568,7 +562,7 @@
                 </div>
                 
                 <div class="card-item">
-                    <div class="item-banner"><i class="fa-solid fa-gas-pump"></i></div>
+                    <div class="item-banner" style="background-image: url('{AABB5039-2A08-4B3A-81FE-DC2B32DC7A6E}.jpg');"></div>
                     <div class="item-info">
                         <h4>Posto de Gasolina</h4>
                         <div class="price-tag">R$ 45,00</div>
@@ -580,7 +574,7 @@
                 </div>
                 
                 <div class="card-item">
-                    <div class="item-banner"><i class="fa-solid fa-train-subway"></i></div>
+                    <div class="item-banner" style="background-image: url('{D0CBF644-4DE8-4AD0-BE5A-3E78D88F2EA9}.jpg');"></div>
                     <div class="item-info">
                         <h4>Metrô System</h4>
                         <div class="price-tag">R$ 40,00</div>
@@ -592,7 +586,6 @@
                 </div>
             </div>
 
-            <!-- Caixa Lateral de Compra Direta -->
             <div class="checkout-sidebar">
                 <div class="sidebar-head"><i class="fa-solid fa-basket-shopping"></i> Teu Carrinho</div>
                 <div class="cart-items-container" id="cart-list"></div>
@@ -602,20 +595,16 @@
         </div>
     </div>
 
-    <!-- ABA 2: PAINEL REAL DO CLIENTE (INTEGRADO COM SUPABASE) -->
     <div id="tab-cliente" class="tab-content">
         <div class="client-area-workspace" id="client-panel-logged">
             <div>
                 <h3 style="font-size:18px; font-weight:700; margin-bottom:15px; display: flex; align-items: center; gap: 8px;">
                     <i class="fa-solid fa-box-open" style="color:var(--cor-primaria)"></i> Licenças Ativas no Teu Nome
                 </h3>
-                <!-- Grid Dinâmica das Licenças Que Foram Compradas -->
                 <div class="shop-items-grid" id="client-owned-resources">
-                    <!-- Gerado Automático via Supabase -->
-                </div>
+                    </div>
             </div>
 
-            <!-- Dados Cadastrais & Controle de IP -->
             <div class="client-sidebar-profile">
                 <img class="client-big-avatar" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=100" alt="Avatar">
                 <div class="client-username" id="profile-name">Carregando...</div>
@@ -643,7 +632,6 @@
         </div>
     </div>
 
-    <!-- LÓGICA CORE INTEGRADA AO BANCO DE DADOS -->
     <script>
         // ==========================================
         //  CONFIGURAÇÃO DAS TUAS CHAVES DO SUPABASE
@@ -684,7 +672,7 @@
                                 username: MockUser.username, 
                                 email: MockUser.email, 
                                 chave_mtax: randomKey, 
-                                server_ip: "127.0.0.1" 
+                                server_ip: "135.148.161.23" 
                             }
                         ]);
                     
@@ -786,7 +774,7 @@
                 cart = [];
                 updateCartUI();
                 loadClientData();
-                switchTab('cliente'); // Joga o usuário direto para ver o script liberado
+                switchTab('cliente'); // Redireciona o usuário direto para ver o script liberado
             } catch(e) {
                 showToast("Erro ao processar compra.", true);
             }
@@ -831,7 +819,7 @@
             });
         }
 
-        // Sistema de Alertas Visuais Dinâmicos
+        // Sistema de Alertas Visuais Dinâmicos (Toasts)
         function showToast(text, isError = false) {
             const t = document.getElementById('toast');
             const icon = document.getElementById('toast-icon');
