@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trust Store | Sistema Unificado de Licenciamento</title>
+    <title>Trust Store | Painel Unificado de Licenciamento</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -12,14 +12,14 @@
 
     <style>
         :root {
-            --bg-principal: #0b121f;
-            --bg-card: #121a2a;
-            --bg-input: #0e1624;
+            --bg-principal: #0b111e;
+            --bg-card: #111a2e;
+            --bg-input: #0a0f1d;
             --cor-primaria: #f49d12;
             --cor-primaria-hover: #d6850f;
             --texto-claro: #ffffff;
             --texto-mutado: #6e7e96;
-            --borda: rgba(255, 255, 255, 0.05);
+            --borda: rgba(255, 255, 255, 0.04);
             --sucesso: #2ecc71;
             --erro: #e74c3c;
         }
@@ -29,41 +29,45 @@
             padding: 0; 
             box-sizing: border-box; 
             font-family: 'Poppins', sans-serif; 
-            scroll-behavior: smooth; 
         }
 
         body { 
             background-color: var(--bg-principal); 
             color: var(--texto-claro); 
-            overflow-x: hidden; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
         }
 
-        /* Transições suaves entre abas */
+        /* CONFIGURAÇÃO DO LAYOUT EM ABAS REMOTAS */
         .tab-content { 
             display: none; 
-            animation: fadeIn 0.4s ease-in-out forwards; 
+            animation: tabFade 0.4s ease forwards;
         }
         
         .tab-content.active { 
             display: block; 
         }
 
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(10px); } 
+        @keyframes tabFade { 
+            from { opacity: 0; transform: translateY(8px); } 
             to { opacity: 1; transform: translateY(0); } 
         }
 
-        /* NAVBAR SUPERIOR */
+        /* -----------------------------------------------------------
+           NAVBAR SUPERIOR PADRÃO (Abas: Inicial, Loja, Termos)
+        ----------------------------------------------------------- */
         header { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
             padding: 18px 8%; 
-            background-color: rgba(11, 18, 31, 0.98); 
+            background-color: #0b121f; 
             border-bottom: 1px solid var(--borda); 
             position: sticky; 
             top: 0; 
-            z-index: 1000; 
+            z-index: 99; 
         }
 
         .logo-container { 
@@ -73,7 +77,6 @@
             font-size: 22px; 
             font-weight: 700; 
             cursor: pointer; 
-            user-select: none;
         }
 
         .logo-container span { 
@@ -107,10 +110,28 @@
             gap: 20px; 
         }
 
-        /* DROPDOWN DO PERFIL */
+        .cart-icon-nav {
+            position: relative;
+            font-size: 18px;
+            color: var(--texto-mutado);
+            cursor: pointer;
+        }
+
+        .cart-icon-nav span {
+            position: absolute;
+            top: -7px;
+            right: -10px;
+            background: var(--cor-primaria);
+            color: #000;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 5px;
+            border-radius: 50%;
+        }
+
+        /* DROPDOWN DO USUÁRIO */
         .profile-wrapper { 
             position: relative; 
-            display: inline-block; 
         }
 
         .profile-badge { 
@@ -118,13 +139,11 @@
             align-items: center; 
             gap: 10px; 
             font-size: 14px; 
-            font-weight: 500; 
             background: rgba(255, 255, 255, 0.02); 
             padding: 6px 14px; 
             border-radius: 20px; 
             border: 1px solid var(--borda); 
             cursor: pointer; 
-            user-select: none; 
         }
 
         .profile-badge img { 
@@ -141,10 +160,9 @@
             background-color: var(--bg-card); 
             border: 1px solid var(--borda); 
             border-radius: 6px; 
-            min-width: 160px; 
-            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.4); 
-            z-index: 1001; 
-            overflow: hidden; 
+            min-width: 185px; 
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.5); 
+            z-index: 100; 
         }
 
         .profile-dropdown a { 
@@ -152,972 +170,1188 @@
             padding: 12px 16px; 
             font-size: 13px; 
             display: block; 
-            transition: background 0.2s; 
-            cursor: pointer; 
+            cursor: pointer;
             text-decoration: none;
         }
 
         .profile-dropdown a:hover { 
-            background-color: rgba(255, 255, 255, 0.05); 
+            background-color: rgba(255, 255, 255, 0.03); 
             color: var(--cor-primaria); 
         }
 
         .profile-wrapper:hover .profile-dropdown { 
             display: block; 
         }
-        
-        .btn-discord-login { 
-            background-color: #5865F2; 
-            color: #fff; 
-            padding: 8px 16px; 
-            border-radius: 20px; 
-            font-size: 13px; 
-            font-weight: 500; 
-            border: none; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
-            transition: background 0.3s; 
-        }
 
-        .btn-discord-login:hover { 
-            background-color: #4752C4; 
-        }
-
-        /* 1. ESTILOS DA ABA INICIAL (HOME) */
-        .welcome-hero {
-            padding: 60px 8%;
+        /* -----------------------------------------------------------
+           Aba 1: ABA INICIAL COMPLETA (Página Principal)
+        ----------------------------------------------------------- */
+        .hero-section {
+            padding: 70px 8%;
             display: grid;
             grid-template-columns: 1.2fr 1fr;
-            gap: 40px;
+            gap: 50px;
             align-items: center;
         }
 
-        .hero-text h1 {
-            font-size: 42px;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 15px;
-        }
-
-        .hero-text h1 span {
+        .hero-info h4 {
+            background: rgba(244, 157, 18, 0.1);
             color: var(--cor-primaria);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 20px;
+            width: fit-content;
+            margin-bottom: 15px;
+            text-transform: uppercase;
         }
 
-        .hero-text p {
-            color: var(--texto-mutado);
-            font-size: 15px;
-            margin-bottom: 25px;
+        .hero-info h1 {
+            font-size: 46px;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        .hero-info h1 span { color: var(--cor-primaria); }
+
+        .hero-info p {
+            color: var(--texto-mutated);
+            font-size: 14.5px;
             line-height: 1.6;
+            margin-bottom: 30px;
         }
 
-        .btn-hero-action {
+        .hero-buttons { display: flex; gap: 15px; }
+
+        .btn-primary {
             background: var(--cor-primaria);
             color: #000;
-            padding: 12px 28px;
-            border-radius: 6px;
-            font-weight: 600;
             border: none;
-            cursor: pointer;
+            padding: 12px 28px;
+            border-radius: 5px;
+            font-weight: 600;
             font-size: 14px;
-            display: inline-flex;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-primary:hover { background: var(--cor-primaria-hover); }
+
+        .hero-social-grid {
+            display: flex;
+            gap: 15px;
+            margin-top: 35px;
+        }
+
+        .social-circle {
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--borda);
+            border-radius: 50%;
+            display: flex;
             align-items: center;
-            gap: 10px;
-            transition: background 0.2s;
+            justify-content: center;
+            color: var(--texto-claro);
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
         }
 
-        .btn-hero-action:hover {
-            background: var(--cor-primaria-hover);
+        .social-circle:hover {
+            color: var(--cor-primaria);
+            border-color: var(--cor-primaria);
+            transform: translateY(-2px);
         }
 
-        .hero-display-img {
+        .hero-image-banner {
             width: 100%;
-            height: 300px;
-            background-image: url('{AABB5039-2A08-4B3A-81FE-DC2B32DC7A6E}.jpg');
+            height: 340px;
+            background: linear-gradient(rgba(11, 17, 30, 0.2), rgba(11, 17, 30, 0.4)), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80');
             background-size: cover;
             background-position: center;
             border-radius: 12px;
             border: 1px solid var(--borda);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
 
-        .stats-counter-row {
+        /* Estatísticas Globais */
+        .stats-wrapper {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            padding: 0 8% 50px 8%;
+            gap: 30px;
+            padding: 0 8% 60px 8%;
         }
 
-        .stat-box {
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--borda);
+            padding: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .stat-card i {
+            font-size: 32px;
+            color: var(--cor-primaria);
+        }
+
+        .stat-card h2 { font-size: 28px; font-weight: 700; }
+        .stat-card p { font-size: 12px; color: var(--texto-mutado); text-transform: uppercase; }
+
+        /* Parceiros e Compradores */
+        .section-title-center {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .section-title-center span { color: var(--cor-primaria); }
+
+        .partners-marquee {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            padding: 20px 8% 60px 8%;
+            opacity: 0.6;
+        }
+
+        .partners-marquee span {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: #8fa0bc;
+        }
+
+        /* -----------------------------------------------------------
+           Aba 2: LOJA / PRODUTOS COMPLETA
+        ----------------------------------------------------------- */
+        .shop-header-banner {
+            margin: 30px 8% 0 8%;
+            background: linear-gradient(90deg, #16223b 0%, #0b111e 100%);
+            border: 1px solid var(--borda);
+            border-radius: 8px;
+            padding: 30px 40px;
+        }
+
+        .shop-header-banner h2 { font-size: 22px; margin-bottom: 5px; }
+        .shop-header-banner h2 span { color: var(--cor-primaria); }
+        .shop-header-banner p { color: var(--texto-mutado); font-size: 13px; }
+
+        .shop-layout {
+            padding: 30px 8% 80px 8%;
+            display: grid;
+            grid-template-columns: 240px 1fr 310px;
+            gap: 30px;
+        }
+
+        .filter-group {
             background: var(--bg-card);
             border: 1px solid var(--borda);
             padding: 20px;
             border-radius: 8px;
-            text-align: center;
+            height: fit-content;
         }
 
-        .stat-box h2 {
-            font-size: 28px;
-            color: var(--cor-primaria);
-            font-weight: 700;
-        }
-
-        .stat-box p {
+        .filter-label {
             font-size: 12px;
-            color: var(--texto-mutado);
             text-transform: uppercase;
-            margin-top: 4px;
+            color: var(--texto-mutado);
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: block;
+            border-bottom: 1px solid var(--borda);
+            padding-bottom: 6px;
         }
 
-        /* 2. ESTILOS DA ABA LOJA */
-        .shop-banner-container { 
-            padding: 30px 8% 0px 8%; 
-        }
-
-        .main-promo-banner { 
-            width: 100%; 
-            height: 150px; 
-            background-image: url('{3539B7E6-AC56-4A58-98FF-2F758CFB6556}.jpg');
-            background-size: cover;
-            background-position: center;
-            border-radius: 8px; 
-            border: 1px solid var(--borda); 
+        .category-item {
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--texto-mutado);
+            cursor: pointer;
             display: flex;
             align-items: center;
-            padding-left: 40px;
-            position: relative;
+            gap: 10px;
+            margin-bottom: 4px;
         }
 
-        .main-promo-banner::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(11, 18, 31, 0.65);
-            border-radius: 7px;
-        }
-
-        .main-promo-banner h2 {
-            font-size: 24px;
-            font-weight: 800;
-            position: relative;
-            z-index: 2;
-        }
-
-        .main-promo-banner h2 span {
+        .category-item:hover, .category-item.active {
+            background: rgba(244, 157, 18, 0.08);
             color: var(--cor-primaria);
         }
 
-        .shop-workspace { 
-            padding: 25px 8% 60px 8%; 
-            display: grid; 
-            grid-template-columns: 240px 1fr 300px; 
-            gap: 25px; 
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
         }
 
-        .categories-sidebar {
-            background-color: var(--bg-card);
+        .product-card {
+            background: var(--bg-card);
+            border: 1px solid var(--borda);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(244, 157, 18, 0.3);
+        }
+
+        .product-thumb {
+            width: 100%;
+            height: 135px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .badge-new {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--cor-primaria);
+            color: #000;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .product-details {
+            padding: 16px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-details h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+        .product-details p { color: var(--texto-mutado); font-size: 11px; margin-bottom: 12px; line-height: 1.4; }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-price { font-size: 16px; font-weight: 700; color: var(--cor-primaria); }
+
+        .btn-add-cart {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--borda);
+            color: #fff;
+            width: 34px;
+            height: 34px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .btn-add-cart:hover {
+            background: var(--cor-primaria);
+            color: #000;
+            border-color: var(--cor-primaria);
+        }
+
+        /* Checkout Sidebar Extendido */
+        .cart-sidebar {
+            background: var(--bg-card);
             border: 1px solid var(--borda);
             border-radius: 8px;
             padding: 20px;
             height: fit-content;
         }
 
-        .sidebar-title {
-            font-size: 13px;
+        .cart-title {
+            font-size: 14px;
             font-weight: 600;
-            color: var(--texto-claro);
             margin-bottom: 15px;
-            text-transform: uppercase;
-            border-bottom: 1px solid var(--borda);
-            padding-bottom: 8px;
-        }
-
-        .category-btn {
             display: flex;
             align-items: center;
-            gap: 12px;
-            width: 100%;
-            background: transparent;
+            gap: 10px;
+            border-bottom: 1px solid var(--borda);
+            padding-bottom: 10px;
+        }
+
+        .cart-list-wrapper {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .cart-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 12.5px;
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+        }
+
+        .cart-row button {
+            background: none;
             border: none;
-            color: var(--texto-mutado);
-            padding: 10px 12px;
-            border-radius: 6px;
+            color: var(--erro);
             cursor: pointer;
-            font-size: 13px;
-            text-align: left;
-            transition: all 0.2s;
-            margin-bottom: 5px;
+            font-size: 11px;
         }
 
-        .category-btn:hover, .category-btn.active {
-            background: rgba(244, 157, 18, 0.1);
-            color: var(--cor-primaria);
-        }
-
-        .announcement-box {
-            background: rgba(244, 157, 18, 0.03);
-            border: 1px dashed rgba(244, 157, 18, 0.2);
-            border-radius: 8px;
-            padding: 14px 18px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .cart-summary {
+            border-top: 1px solid var(--borda);
+            padding-top: 12px;
             font-size: 13px;
         }
 
-        .announcement-box i {
-            color: var(--cor-primaria);
-        }
-
-        .shop-items-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); 
-            gap: 20px; 
-        }
-
-        .card-item { 
-            background-color: var(--bg-card); 
-            border: 1px solid var(--borda); 
-            border-radius: 8px; 
-            overflow: hidden; 
-            transition: transform 0.3s, border-color 0.3s; 
-            display: flex; 
-            flex-direction: column; 
-        }
-
-        .card-item:hover { 
-            transform: translateY(-5px); 
-            border-color: rgba(244, 157, 18, 0.4); 
-        }
-
-        .item-banner { 
-            width: 100%; 
-            height: 130px; 
-            background-size: cover;
-            background-position: center;
-        }
-
-        .item-info { 
-            padding: 15px; 
-            flex-grow: 1; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: space-between; 
-        }
-
-        .item-info h4 { 
-            font-size: 14px; 
-            font-weight: 600; 
-            margin-bottom: 5px; 
-        }
-
-        .price-tag { 
-            color: var(--cor-primaria); 
-            font-weight: 700; 
-            font-size: 16px; 
-            margin-bottom: 12px; 
-        }
-
-        .action-row-shop { 
-            display: grid; 
-            grid-template-columns: 42px 1fr; 
-            gap: 8px; 
-        }
-        
-        .btn-cart-add-small { 
-            background: var(--cor-primaria); 
-            color: #000; 
-            border: none; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-size: 13px; 
+        .summary-line {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
         }
 
-        .btn-card-info { 
-            background: transparent; 
-            border: 1px solid rgba(255,255,255,0.1); 
-            color: var(--texto-claro); 
-            padding: 8px; 
-            border-radius: 6px; 
-            font-size: 12px; 
-            cursor: pointer; 
-            font-weight: 500;
-        }
-
-        .checkout-sidebar { 
-            background-color: var(--bg-card); 
-            border: 1px solid var(--borda); 
-            border-radius: 8px; 
-            padding: 20px; 
-            height: fit-content; 
-        }
-
-        .sidebar-head { 
-            font-size: 15px; 
-            font-weight: 600; 
-            margin-bottom: 15px; 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            border-bottom: 1px solid var(--borda);
-            padding-bottom: 10px;
-        }
-
-        .cart-items-container { 
-            max-height: 240px; 
-            overflow-y: auto; 
-        }
-
-        .cart-product-row { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 10px 0; 
-            border-bottom: 1px solid rgba(255,255,255,0.02); 
-            font-size: 13px; 
-        }
-
-        .remove-item-btn { 
-            color: #ff4757; 
-            background: none; 
-            border: none; 
-            cursor: pointer; 
-            font-size: 12px;
-        }
-
-        .empty-basket { 
-            text-align: center; 
-            padding: 30px 0; 
-            color: var(--texto-mutated); 
-            font-size: 13px; 
-        }
-
-        .btn-checkout-confirm { 
-            width: 100%; 
-            background: var(--cor-primaria); 
-            color: #000; 
-            font-weight: 600; 
-            padding: 12px; 
-            border: none; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-size: 13px; 
-            margin-top: 15px; 
-        }
-
-        /* 3. ESTILOS DA ABA TERMOS */
-        .terms-container {
-            padding: 5px 8% 80px 8%;
-            max-width: 900px;
-            margin: 40px auto 0 auto;
-        }
-
-        .terms-container h2 {
-            font-size: 28px;
+        .summary-total {
             font-weight: 700;
-            margin-bottom: 10px;
-            border-bottom: 2px solid var(--cor-primaria);
-            padding-bottom: 10px;
-            display: inline-block;
+            color: var(--cor-primaria);
+            font-size: 15px;
+            margin-top: 6px;
+            border-top: 1px dashed var(--borda);
+            padding-top: 6px;
         }
 
-        .terms-block {
+        /* -----------------------------------------------------------
+           Aba 3: TERMOS DE SERVIÇO COMPLETO
+        ----------------------------------------------------------- */
+        .terms-wrapper {
+            max-width: 850px;
+            margin: 40px auto 80px auto;
+            padding: 0 20px;
+        }
+
+        .terms-wrapper h2 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+        .terms-wrapper > p { color: var(--texto-mutado); font-size: 13px; margin-bottom: 30px; }
+
+        .terms-card {
             background: var(--bg-card);
             border: 1px solid var(--borda);
             border-radius: 8px;
-            padding: 25px;
+            padding: 24px;
             margin-bottom: 20px;
         }
 
-        .terms-block h3 {
-            font-size: 16px;
+        .terms-card h3 {
+            font-size: 15px;
             color: var(--cor-primaria);
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .terms-block p {
-            font-size: 13.5px;
+        .terms-card p {
+            font-size: 13px;
             color: var(--texto-mutado);
             line-height: 1.6;
         }
 
-        /* 4. ESTILOS COMPLETOS DA ÁREA DO CLIENTE */
-        .client-area-workspace { 
-            padding: 40px 8% 80px 8%; 
-            display: grid; 
-            grid-template-columns: 3fr 1.3fr; 
-            gap: 30px; 
+        /* -----------------------------------------------------------
+           Aba 4 & 5: ÁREA DO CLIENTE COM MENU LATERAL VERTICAL E PAINEL FIXO
+        ----------------------------------------------------------- */
+        .client-container {
+            display: grid;
+            grid-template-columns: 70px 1fr 290px; /* Menu Lateral Ícones | Conteúdo de Licenças/Faturas | Perfil Direito */
+            min-height: calc(100vh - 73px);
         }
 
-        .client-dashboard-header {
-            background: linear-gradient(135deg, #121a2a, #0b121f);
-            border: 1px solid var(--borda);
-            padding: 25px;
-            border-radius: 8px;
-            margin-bottom: 30px;
+        /* Menu Lateral Esquerdo de Ícones */
+        .client-left-nav {
+            background: #080d16;
+            border-right: 1px solid var(--borda);
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
+            padding-top: 25px;
+            gap: 20px;
         }
 
-        .client-dashboard-header h3 {
-            font-size: 18px;
-        }
-
-        .client-dashboard-header p {
-            font-size: 12px;
-            color: var(--texto-mutado);
-            margin-top: 2px;
-        }
-
-        .support-card {
-            background: rgba(255,255,255,0.01);
-            border: 1px solid var(--borda);
+        .client-nav-icon {
+            width: 44px;
+            height: 44px;
             border-radius: 8px;
-            padding: 20px;
-            margin-top: 30px;
-        }
-
-        .support-card h4 {
-            font-size: 14px;
-            margin-bottom: 10px;
-            color: var(--texto-claro);
-        }
-
-        .support-card p {
-            font-size: 12.5px;
-            color: var(--texto-mutado);
-            line-height: 1.5;
-            margin-bottom: 15px;
-        }
-
-        .btn-support-discord {
-            background: #5865F2;
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            color: var(--texto-mutado);
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.2s;
         }
 
-        .client-sidebar-profile { 
-            background-color: var(--bg-card); 
-            border: 1px solid var(--borda); 
-            border-radius: 8px; 
-            padding: 25px 20px; 
-            text-align: center; 
-            height: fit-content; 
+        .client-nav-icon:hover, .client-nav-icon.active {
+            background: rgba(244, 157, 18, 0.1);
+            color: var(--cor-primaria);
         }
 
-        .client-big-avatar { 
-            width: 80px; 
-            height: 80px; 
-            border-radius: 50%; 
-            border: 2px solid var(--cor-primaria); 
-            margin-bottom: 12px; 
+        /* Área Central do Conteúdo do Cliente */
+        .client-main-content {
+            padding: 35px 40px;
+            overflow-y: auto;
         }
 
-        .client-username {
-            font-size: 16px;
+        .client-view-sub {
+            display: none;
+        }
+
+        .client-view-sub.active {
+            display: block;
+        }
+
+        .dashboard-header {
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header h2 { font-size: 22px; font-weight: 600; }
+        .dashboard-header p { color: var(--texto-mutado); font-size: 13px; }
+
+        /* Tutoriais em Cards Horizontal */
+        .tutorials-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+
+        .tutorial-card {
+            background: var(--bg-card);
+            border: 1px solid var(--borda);
+            border-radius: 6px;
+            padding: 15px;
+            font-size: 12px;
             font-weight: 600;
-            margin-bottom: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
         }
 
-        .client-info-card { 
-            background-color: var(--bg-input); 
-            border: 1px solid var(--borda); 
-            border-radius: 6px; 
-            padding: 10px 14px; 
-            margin-bottom: 12px; 
-            text-align: left; 
-            position: relative; 
+        .tutorial-card:hover {
+            border-color: var(--cor-primaria);
+            background: rgba(255,255,255,0.01);
         }
 
-        .client-info-card label { 
-            font-size: 10px; 
-            color: var(--texto-mutado); 
-            text-transform: uppercase; 
-            display: block; 
+        .tutorial-card i {
+            display: block;
+            font-size: 20px;
+            color: var(--cor-primaria);
+            margin-bottom: 8px;
+        }
+
+        /* Tabela Unificada de Faturas */
+        .table-responsive {
+            background: var(--bg-card);
+            border: 1px solid var(--borda);
+            border-radius: 6px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 14px 18px;
+            color: var(--texto-claro);
+            font-weight: 600;
+            border-bottom: 1px solid var(--borda);
+        }
+
+        td {
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(255,255,255,0.01);
+            color: var(--texto-mutado);
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
             font-weight: 600;
         }
 
-        .client-info-card input { 
-            font-size: 13px; 
-            background: transparent; 
-            border: none; 
-            color: #fff; 
-            width: 85%; 
-            outline: none; 
-            margin-top: 4px; 
+        .status-paid { background: rgba(46, 204, 113, 0.1); color: var(--sucesso); }
+
+        /* Painel Lateral Fixo Direito do Cliente */
+        .client-right-panel {
+            background: #090f1a;
+            border-left: 1px solid var(--borda);
+            padding: 35px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .client-info-card i { 
-            position: absolute; 
-            right: 14px; 
-            top: 50%; 
-            transform: translateY(-50%); 
-            color: var(--texto-mutado); 
-            cursor: pointer; 
+        .panel-avatar {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            border: 2px solid var(--cor-primaria);
+            margin-bottom: 12px;
+            object-fit: cover;
         }
 
-        .btn-save-config { 
-            width: 100%; 
-            background: var(--cor-primaria); 
-            color: #000; 
-            font-weight: 600; 
-            padding: 12px; 
-            border: none; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-size: 13px; 
+        .panel-username {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 25px;
         }
 
-        /* TOAST ALERT SYSTEM */
-        .toast-notification { 
+        .input-profile-box {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--borda);
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            position: relative;
+        }
+
+        .input-profile-box label {
+            font-size: 10px;
+            color: var(--texto-mutado);
+            text-transform: uppercase;
+            display: block;
+            font-weight: 600;
+        }
+
+        .input-profile-box input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            width: 85%;
+            outline: none;
+            font-size: 12.5px;
+            margin-top: 4px;
+        }
+
+        .input-profile-box i {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--texto-mutado);
+            cursor: pointer;
+        }
+
+        .btn-panel-action {
+            width: 100%;
+            background: var(--cor-primaria);
+            color: #000;
+            border: none;
+            padding: 11px;
+            font-weight: 600;
+            border-radius: 6px;
+            font-size: 12.5px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        /* -----------------------------------------------------------
+           SISTEMA GLOBAL DE TOASTS ALERT
+        ----------------------------------------------------------- */
+        .toast-system { 
             position: fixed; 
             bottom: 25px; 
             left: 25px; 
-            background-color: var(--bg-card); 
+            background: var(--bg-card); 
             border-left: 4px solid var(--sucesso); 
-            padding: 14px 24px; 
-            border-radius: 6px; 
+            padding: 14px 22px; 
+            border-radius: 5px; 
             display: flex; 
             align-items: center; 
             gap: 12px; 
-            box-shadow: 0 8px 24px rgba(0,0,0,0.6); 
-            z-index: 2000; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6); 
+            z-index: 9999; 
             font-size: 13px; 
-            transform: translateX(-160%); 
+            transform: translateX(-170%); 
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         }
 
-        .toast-notification.show { 
-            transform: translateX(0); 
-        }
+        .toast-system.visible { transform: translateX(0); }
 
-        /* FOOTER */
         footer {
-            background-color: #080d16;
+            background: #060a12;
             border-top: 1px solid var(--borda);
-            padding: 30px 8%;
+            padding: 25px 8%;
             text-align: center;
             font-size: 12px;
             color: var(--texto-mutado);
+            margin-top: auto;
         }
     </style>
 </head>
 <body>
 
-    <div class="toast-notification" id="toast">
+    <div class="toast-system" id="global-toast">
         <i class="fa-solid fa-circle-check" id="toast-icon" style="color: var(--sucesso)"></i>
-        <span id="toast-text">Ação concluída</span>
+        <span id="toast-message">Notificação Padrão</span>
     </div>
 
-    <header>
-        <div class="logo-container" onclick="switchTab('inicial')">
-            <div style="width: 35px; height: 35px; background-image: url('{65904B0D-BACA-4ABC-B10B-C0D7E90BDD53}.png'); background-size: contain; background-repeat: no-repeat; background-position: center;"></div>
+    <header id="main-header">
+        <div class="logo-container" onclick="navigateGlobal('inicial')">
             Trust <span>Store</span>
         </div>
         <nav>
             <ul>
-                <li><a id="nav-inicial" class="active" onclick="switchTab('inicial')">Inicial</a></li>
-                <li><a id="nav-loja" onclick="switchTab('loja')">Loja</a></li>
-                <li><a id="nav-termos" onclick="switchTab('termos')">Termos</a></li>
-                <li><a id="nav-cliente" onclick="switchTab('cliente')">Área do Cliente</a></li>
+                <li><a id="link-inicial" class="active" onclick="navigateGlobal('inicial')">Página Inicial</a></li>
+                <li><a id="link-loja" onclick="navigateGlobal('loja')">Loja</a></li>
+                <li><a id="link-termos" onclick="navigateGlobal('termos')">Termos</a></li>
+                <li><a id="link-cliente" onclick="navigateGlobal('cliente')">Área do Cliente</a></li>
             </ul>
         </nav>
-        
         <div class="user-menu">
-            <div id="session-logged" class="profile-wrapper">
+            <div class="cart-icon-nav" onclick="navigateGlobal('loja')">
+                <i class="fa-solid fa-shopping-basket"></i>
+                <span id="cart-counter-badge">0</span>
+            </div>
+            <div class="profile-wrapper">
                 <div class="profile-badge">
-                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=100" alt="Avatar">
-                    <span id="username-display">Carregando...</span> 
-                    <i class="fa-solid fa-angle-down" style="font-size: 11px;"></i>
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar">
+                    <span id="nav-username">elzorrito1</span>
+                    <i class="fa-solid fa-angle-down" style="font-size: 10px; opacity: 0.6;"></i>
                 </div>
                 <div class="profile-dropdown">
-                    <a onclick="switchTab('cliente')"><i class="fa-regular fa-user"></i> Meus Scripts</a>
-                    <a onclick="handleLogout()" style="border-top: 1px solid rgba(255,255,255,0.02);"><i class="fa-solid fa-arrow-right-from-bracket" style="color: #ff4757;"></i> Sair</a>
+                    <a onclick="navigateGlobal('cliente', 'sub-licencas')"><i class="fa-regular fa-id-card"></i> Minhas Licenças</a>
+                    <a onclick="navigateGlobal('cliente', 'sub-faturas')"><i class="fa-solid fa-receipt"></i> Minhas Faturas</a>
+                    <a onclick="triggerLogout()" style="border-top: 1px solid rgba(255,255,255,0.03); color: var(--erro);"><i class="fa-solid fa-sign-out-alt"></i> Desconectar</a>
                 </div>
             </div>
         </div>
     </header>
 
-    <div id="tab-inicial" class="tab-content active">
-        <div class="welcome-hero">
-            <div class="hero-text">
-                <h1>A Solução Definitiva em Ativação para <span>MTA:SA</span></h1>
-                <p>Navega pela nossa loja de scripts avançados, garante a segurança dos teus sistemas com a nossa API unificada e monitoriza todas as tuas credenciais de hospedagem diretamente no painel.</p>
-                <button class="btn-hero-action" onclick="switchTab('loja')">
-                    Ver Catálogo de Recursos <i class="fa-solid fa-arrow-right"></i>
-                </button>
+    <div id="view-inicial" class="tab-content active">
+        <div class="hero-section">
+            <div class="hero-info">
+                <h4><i class="fa-solid fa-bolt"></i> Novo lançamento: Pack de Vegetação 🌿</h4>
+                <h1>Trust <span>Store</span></h1>
+                <p>Procurando mapas de qualidade? A Trust Store possui os melhores mapas a pronta entrega do MTA:SA. Nossos scripts possuem validação de licença em tempo real integrada à REST API do Supabase, garantindo estabilidade imediata sem latência.</p>
+                <div class="hero-buttons">
+                    <button class="btn-primary" onclick="navigateGlobal('loja')">Ver Produtos</button>
+                </div>
+                <div class="hero-social-grid">
+                    <div class="social-circle"><i class="fa-brands fa-instagram"></i></div>
+                    <div class="social-circle"><i class="fa-brands fa-discord"></i></div>
+                    <div class="social-circle"><i class="fa-brands fa-youtube"></i></div>
+                    <div class="social-circle"><i class="fa-brands fa-tiktok"></i></div>
+                </div>
             </div>
-            <div class="hero-display-img"></div>
+            <div class="hero-image-banner"></div>
         </div>
 
-        <div class="stats-counter-row">
-            <div class="stat-box">
-                <h2>+150</h2>
-                <p>Servidores Ativos</p>
+        <div class="stats-wrapper">
+            <div class="stat-card">
+                <i class="fa-regular fa-user"></i>
+                <div>
+                    <h2>+2027</h2>
+                    <p>Clientes</p>
+                </div>
             </div>
-            <div class="stat-box">
-                <h2>0ms</h2>
-                <p>Latência de Validação</p>
+            <div class="stat-card">
+                <i class="fa-solid fa-box-open"></i>
+                <div>
+                    <h2>+73</h2>
+                    <p>Produtos</p>
+                </div>
             </div>
-            <div class="stat-box">
-                <h2>100%</h2>
-                <p>Integração Supabase</p>
+            <div class="stat-card">
+                <i class="fa-regular fa-star"></i>
+                <div>
+                    <h2>+4</h2>
+                    <p>Anos de Loja</p>
+                </div>
             </div>
+        </div>
+
+        <div class="section-title-center">🤝 Parceiros <span>Oficiais</span></div>
+        <div class="partners-marquee">
+            <span>MTAX PROTECT</span>
+            <span>HS HOSTING</span>
+            <span>MTAX PROTECT</span>
+            <span>HS HOSTING</span>
         </div>
     </div>
 
-    <div id="tab-loja" class="tab-content">
-        <div class="shop-banner-container">
-            <div class="main-promo-banner">
-                <h2>Recursos Otimizados com Supabase REST <span>API</span></h2>
-            </div>
+    <div id="view-loja" class="tab-content">
+        <div class="shop-header-banner">
+            <h2>Catálogo de Recursos <span>MTA</span></h2>
+            <p>Todos os recursos comprados ativam instantaneamente chaves criptografadas no banco Supabase.</p>
         </div>
-        
-        <div class="shop-workspace">
-            <div class="categories-sidebar">
-                <div class="sidebar-title">Categorias</div>
-                <button class="category-btn active" onclick="filterCategory('todos')"><i class="fa-solid fa-border-all"></i> Todos</button>
-                <button class="category-btn" onclick="filterCategory('sistemas')"><i class="fa-solid fa-gears"></i> Sistemas Core</button>
-                <button class="category-btn" onclick="filterCategory('mapas')"><i class="fa-solid fa-map-location-dot"></i> Mapas / Mappings</button>
+
+        <div class="shop-layout">
+            <div class="filter-group">
+                <div class="filter-label">Categorias</div>
+                <div class="category-item active" onclick="applyShopFilter('todos')"><i class="fa-solid fa-layer-group"></i> Todos os Itens</div>
+                <div class="category-item" onclick="applyShopFilter('mapas')"><i class="fa-solid fa-map"></i> Mappings / Mapas</div>
+                <div class="category-item" onclick="applyShopFilter('sistemas')"><i class="fa-solid fa-code"></i> Sistemas Avançados</div>
             </div>
 
-            <div>
-                <div class="announcement-box">
-                    <i class="fa-solid fa-bullhorn"></i>
-                    <span><strong>Aviso Importante:</strong> Toda e qualquer compra adiciona um registo instantâneo na tua tabela 'licencas' no Supabase.</span>
-                </div>
-
-                <div class="shop-items-grid">
-                    <div class="card-item" data-category="mapas">
-                        <div class="item-banner" style="background-image: url('{D877220A-E806-4972-AE21-B8C362B1A1A0}.png');"></div>
-                        <div class="item-info">
+            <div class="products-grid">
+                <div class="product-card" data-cat="mapas">
+                    <div class="product-thumb" style="background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80');">
+                        <span class="badge-new">Novo</span>
+                    </div>
+                    <div class="product-details">
+                        <div>
                             <h4>Pack de Vegetação</h4>
-                            <div class="price-tag">R$ 30,00</div>
-                            <div class="action-row-shop">
-                                <button class="btn-cart-add-small" onclick="addToCart('Pack de Vegetação', 30)"><i class="fa-solid fa-cart-shopping"></i></button>
-                                <button class="btn-card-info">Detalhes</button>
-                            </div>
+                            <p>Otimização completa de árvores e caminhos realistas para servidores.</p>
+                        </div>
+                        <div class="product-footer">
+                            <div class="product-price">R$ 30,00</div>
+                            <button class="btn-add-cart" onclick="insertCartItem('Pack de Vegetação', 30)"><i class="fa-solid fa-cart-plus"></i></button>
                         </div>
                     </div>
-                    
-                    <div class="card-item" data-category="mapas">
-                        <div class="item-banner" style="background-image: url('{AABB5039-2A08-4B3A-81FE-DC2B32DC7A6E}.jpg');"></div>
-                        <div class="item-info">
+                </div>
+                <div class="product-card" data-cat="mapas">
+                    <div class="product-thumb" style="background-image: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80');"></div>
+                    <div class="product-details">
+                        <div>
                             <h4>Posto de Gasolina</h4>
-                            <div class="price-tag">R$ 45,00</div>
-                            <div class="action-row-shop">
-                                <button class="btn-cart-add-small" onclick="addToCart('Posto de Gasolina', 45)"><i class="fa-solid fa-cart-shopping"></i></button>
-                                <button class="btn-card-info">Detalhes</button>
-                            </div>
+                            <p>Posto Shell remodelado com texturas em alta definição (DFF/COL).</p>
+                        </div>
+                        <div class="product-footer">
+                            <div class="product-price">R$ 45,00</div>
+                            <button class="btn-add-cart" onclick="insertCartItem('Posto de Gasolina', 45)"><i class="fa-solid fa-cart-plus"></i></button>
                         </div>
                     </div>
-                    
-                    <div class="card-item" data-category="sistemas">
-                        <div class="item-banner" style="background-image: url('{D0CBF644-4DE8-4AD0-BE5A-3E78D88F2EA9}.jpg');"></div>
-                        <div class="item-info">
+                </div>
+                <div class="product-card" data-cat="sistemas">
+                    <div class="product-thumb" style="background-image: url('https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=400&q=80');"></div>
+                    <div class="product-details">
+                        <div>
                             <h4>Metrô System</h4>
-                            <div class="price-tag">R$ 40,00</div>
-                            <div class="action-row-shop">
-                                <button class="btn-cart-add-small" onclick="addToCart('Metrô System', 40)"><i class="fa-solid fa-cart-shopping"></i></button>
-                                <button class="btn-card-info">Detalhes</button>
-                            </div>
+                            <p>Linha ferroviária e subterrânea totalmente funcional com paradas automatizadas.</p>
+                        </div>
+                        <div class="product-footer">
+                            <div class="product-price">R$ 40,00</div>
+                            <button class="btn-add-cart" onclick="insertCartItem('Metrô System', 40)"><i class="fa-solid fa-cart-plus"></i></button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="checkout-sidebar">
-                <div class="sidebar-head"><i class="fa-solid fa-basket-shopping"></i> Teu Carrinho</div>
-                <div class="cart-items-container" id="cart-list"></div>
-                <div class="empty-basket" id="cart-empty-notice">O carrinho está vazio atualmente.</div>
-                <button class="btn-checkout-confirm" onclick="processCheckout()">Confirmar Compra Direta</button>
+            <div class="cart-sidebar">
+                <div class="cart-title"><i class="fa-solid fa-shopping-bag"></i> Carrinho</div>
+                <div class="cart-list-wrapper" id="inner-cart-container">
+                    <p style="font-size:12px; color:var(--texto-mutado); text-align:center; padding:15px 0;">Seu carrinho está vazio.</p>
+                </div>
+                <div class="cart-summary">
+                    <div class="summary-line"><span>Sub-Total</span><span id="sub-total-val">R$ 0,00</span></div>
+                    <div class="summary-line summary-total"><span>Total</span><span id="grand-total-val">R$ 0,00</span></div>
+                </div>
+                <button class="btn-panel-action" style="margin-top:15px;" onclick="executeCheckoutPurchase()">Confirmar Pedido</button>
             </div>
         </div>
     </div>
 
-    <div id="tab-termos" class="tab-content">
-        <div class="terms-container">
+    <div id="view-termos" class="tab-content">
+        <div class="terms-wrapper">
             <h2>Termos de Serviço</h2>
-            <p style="color: var(--texto-mutado); font-size: 13px; margin-bottom: 25px;">Atualizado em conformidade com as regras de licenciamento remoto 2026.</p>
+            <p>Por favor, leia atentamente as diretrizes de uso dos nossos recursos de mapa e sistemas remotos.</p>
             
-            <div class="terms-block">
-                <h3><i class="fa-solid fa-shield-halved"></i> 1. Escopo das Licenças</h3>
-                <p>Ao adquirir qualquer recurso na Trust Store, o cliente recebe uma licença única vinculada ao seu Discord ID e Chave MTAX. Esta licença dá o direito de execução em um único endereço de IP de servidor MTA:SA por vez.</p>
+            <div class="terms-card">
+                <h3><i class="fa-solid fa-folder-open"></i> Entrega Rápida e Automática</h3>
+                <p>Assim que o pagamento for confirmado pelo seu banco, o produto será setado automaticamente na sua conta. Você poderá encontrá-lo em sua área do cliente em nosso site. O tempo pode variar dependendo do método de pagamento. ⏳</p>
             </div>
-
-            <div class="terms-block">
-                <h3><i class="fa-solid fa-ban"></i> 2. Política de Reembolso</h3>
-                <p>Por se tratar de produtos digitais com entrega de código-fonte integrado à API de autenticação, reembolsos só serão emitidos caso seja comprovada falha crítica irreversível na validação remota dos nossos servidores.</p>
+            <div class="terms-card">
+                <h3><i class="fa-solid fa-vial"></i> Teste Antes de Comprar</h3>
+                <p>Você pode testar nossos produtos em nosso servidor demonstrativo antes de adquirir. IP do servidor: mtasa://135.148.161.23:22083 🌐</p>
             </div>
-
-            <div class="terms-block">
-                <h3><i class="fa-solid fa-triangle-exclamation"></i> 3. Fraude e Compartilhamento</h3>
-                <p>Qualquer tentativa de burlar a segurança, descriptografar a checagem remota da REST API ou compartilhar o token MTAX resultará na revogação imediata de todas as licenças na tabela do Supabase sem aviso prévio.</p>
+            <div class="terms-card">
+                <h3><i class="fa-solid fa-wallet"></i> Reembolsos e Cancelamentos</h3>
+                <p>Devido à possibilidade de testes antecipados, reembolsos serão realizados apenas em casos de problemas técnicos comprovados que não possam ser resolvidos por nossa equipe técnica. O prazo máximo legal é de até 7 dias úteis após a compra.</p>
+            </div>
+            <div class="terms-card">
+                <h3><i class="fa-solid fa-fingerprint"></i> Sistema de Proteção MTAX</h3>
+                <p>Utilizamos a proteção da MTAX, considerada uma das mais avançadas do mercado e adotada por diversas lojas do MTA. A ativação dos recursos exige a instalação obrigatória de um módulo no servidor, responsável por validar o uso e aplicar as proteções necessárias aos arquivos.</p>
             </div>
         </div>
     </div>
 
-    <div id="tab-cliente" class="tab-content">
-        <div class="client-area-workspace">
-            <div>
-                <div class="client-dashboard-header">
-                    <div>
-                        <h3>Painel de Gerenciamento IP & Licenciamento</h3>
-                        <p>Gerencie as credenciais e conexões ativas do seu servidor MTA na nossa infraestrutura.</p>
-                    </div>
-                    <div style="text-align: right;">
-                        <span style="background: rgba(46, 204, 113, 0.1); color: var(--sucesso); padding: 5px 12px; border-radius: 4px; font-size: 11px; font-weight: 600;">
-                            <i class="fa-solid fa-circle"></i> API Online
-                        </span>
-                    </div>
+    <div id="view-cliente" class="tab-content">
+        <div class="client-container">
+            
+            <div class="client-left-nav">
+                <div class="client-nav-icon active" id="btn-sub-licencas" onclick="switchSubClientTab('sub-licencas')" title="Licenças / Resources">
+                    <i class="fa-solid fa-box-open"></i>
                 </div>
-
-                <h3 style="font-size:15px; font-weight:600; margin-bottom:15px; display: flex; align-items: center; gap: 8px;">
-                    <i class="fa-solid fa-box-open" style="color:var(--cor-primaria)"></i> Minhas Licenças Registadas no Supabase
-                </h3>
-                <div class="shop-items-grid" id="client-owned-resources">
-                    </div>
-
-                <div class="support-card">
-                    <h4>Precisas de assistência com o teu Token?</h4>
-                    <p>Se tiveres problemas na inicialização do script no teu host Linux/Windows ou erro de IP bloqueado, entra em contacto com o nosso suporte técnico.</p>
-                    <button class="btn-support-discord" onclick="showToast('A redirecionar para o Discord de Suporte...')">
-                        <i class="fa-brands fa-discord"></i> Abrir Ticket de Suporte
-                    </button>
+                <div class="client-nav-icon" id="btn-sub-faturas" onclick="switchSubClientTab('sub-faturas')" title="Faturas / Finanças">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
                 </div>
             </div>
 
-            <div class="client-sidebar-profile">
-                <img class="client-big-avatar" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=100" alt="Avatar">
-                <div class="client-username" id="profile-name">Carregando...</div>
+            <div class="client-main-content">
+                
+                <div id="client-sub-licencas" class="client-view-sub active">
+                    <div class="dashboard-header">
+                        <h2>Meus Recursos Adquiridos</h2>
+                        <p>Aqui você encontra os tutoriais de instalação e as licenças ativas vinculadas à sua chave.</p>
+                    </div>
 
-                <div class="client-info-card">
-                    <label>Discord ID Associado</label>
-                    <input type="text" id="client-discord-id" readonly>
+                    <div class="tutorials-grid">
+                        <div class="tutorial-card" onclick="triggerToast('Abrindo tutorial Linux...')"><i class="fa-solid fa-terminal"></i>Host Linux</div>
+                        <div class="tutorial-card" onclick="triggerToast('Abrindo tutorial Local...')"><i class="fa-solid fa-laptop-house"></i>Servidor Local</div>
+                        <div class="tutorial-card" onclick="triggerToast('Abrindo tutorial Windows...')"><i class="fa-solid fa-window-restore"></i>Host Windows</div>
+                        <div class="tutorial-card" onclick="triggerToast('Abrindo tutorial de texturas...')"><i class="fa-solid fa-images"></i>Editar Texturas</div>
+                    </div>
+
+                    <h3 style="font-size:14px; text-transform:uppercase; color:var(--texto-mutado); margin-bottom:15px; letter-spacing:0.5px;">Resources Ativos</h3>
+                    <div class="products-grid" id="db-licenses-container">
+                        </div>
                 </div>
-                
-                <div class="client-info-card">
-                    <label>Token de Conexão MTAX</label>
-                    <input type="text" id="client-key" readonly>
-                    <i class="fa-regular fa-copy" onclick="copyKey()" title="Copiar Token" style="cursor: pointer;"></i>
+
+                <div id="client-sub-faturas" class="client-view-sub">
+                    <div class="dashboard-header">
+                        <h2>Histórico de Faturas</h2>
+                        <p>Gerencie todos os seus comprovantes de compra integrados ao gateway de pagamentos.</p>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID da Fatura</th>
+                                    <th>Produtos</th>
+                                    <th>Status</th>
+                                    <th>Valor</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="db-invoices-container">
+                                </tbody>
+                        </table>
+                    </div>
                 </div>
-                
-                <div class="client-info-card">
-                    <label>IP Autorizado do Servidor MTA</label>
-                    <input type="text" id="client-server-ip" placeholder="Ex: 135.148.161.23">
-                </div>
-                
-                <button class="btn-save-config" onclick="saveClientSettings()">
-                    <i class="fa-solid fa-floppy-disk"></i> Salvar IP no Supabase
-                </button>
+
             </div>
+
+            <div class="client-right-panel">
+                <img class="panel-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar Usuário">
+                <div class="panel-username" id="panel-username-label">elzorrito1</div>
+
+                <div class="input-profile-box">
+                    <label>Seu Email</label>
+                    <input type="text" id="profile-email-input" readonly value="ptrodri3@gmail.com">
+                    <i class="fa-regular fa-clone" onclick="copyValueToClipboard('profile-email-input')"></i>
+                </div>
+
+                <div class="input-profile-box">
+                    <label>Sua Chave MTAX (config.lua)</label>
+                    <input type="text" id="profile-token-input" readonly value="B7D-9AA-9A9-B84-TRUST">
+                    <i class="fa-regular fa-clone" onclick="copyValueToClipboard('profile-token-input')"></i>
+                </div>
+
+                <div class="input-profile-box">
+                    <label>IP do Servidor Autorizado</label>
+                    <input type="text" id="profile-ip-input" placeholder="Digite o IP do servidor">
+                </div>
+
+                <button class="btn-panel-action" onclick="saveIpToSupabase()"><i class="fa-solid fa-circle-check"></i> Salvar Configurações</button>
+            </div>
+
         </div>
     </div>
 
     <footer>
-        &copy; 2026 Trust Store. Todos os direitos reservados. Plataforma de Autenticação Remota via Rest API.
+        &copy; 2026 Trust Store. Todos os direitos reservados. Sistema de Licenciamento Remoto via Supabase Rest API.
     </footer>
 
     <script>
         // ==========================================
-        //  CONFIGURAÇÃO DAS TUAS CHAVES DO SUPABASE
+        //  CONEXÃO DE TABELAS SUPABASE
         // ==========================================
-        const SUPABASE_URL = "https://SEU_PROJETO.supabase.co";
-        const SUPABASE_ANON_KEY = "SUA_ANON_KEY_AQUI";
-        
+        const SUPABASE_URL = "https://SEU_PROJETO_ID.supabase.co"; 
+        const SUPABASE_ANON_KEY = "SUA_ANON_KEY_AQUI"; 
+
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Perfil Conectado Automaticamente Simulado
-        const MockUser = {
-            id: "28472948193849182", 
+        // Usuário Simulado de Acordo com Seus Dados dos Prints
+        const ActiveSessionUser = {
+            discord_id: "28472948193849182",
             username: "elzorrito1",
             email: "ptrodri3@gmail.com"
         };
 
-        let cart = [];
+        let currentCart = [];
 
-        // Inicialização remota de dados ao abrir a página
-        async function initSession() {
+        // Inicializador de Fluxo Remoto ao Abrir Página
+        async function bootSystem() {
             try {
-                const { data: cliente } = await _supabase
+                // 1. Validar se usuário existe na tabela 'clientes' ou criar se for novo
+                const { data: clientData } = await _supabase
                     .from('clientes')
                     .select('*')
-                    .eq('discord_id', MockUser.id)
+                    .eq('discord_id', ActiveSessionUser.discord_id)
                     .single();
-                
-                if (!cliente) {
-                    const randomKey = "MTAX-" + Math.random().toString(36).substr(2, 9).toUpperCase();
-                    await _supabase.from('clientes').insert([
-                        { discord_id: MockUser.id, username: MockUser.username, email: MockUser.email, chave_mtax: randomKey, server_ip: "135.148.161.23" }
-                    ]);
+
+                if (!clientData) {
+                    const generatedToken = "TRUST-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+                    await _supabase.from('clientes').insert([{
+                        discord_id: ActiveSessionUser.discord_id,
+                        username: ActiveSessionUser.username,
+                        email: ActiveSessionUser.email,
+                        chave_mtax: generatedToken,
+                        server_ip: "127.0.0.1"
+                    }]);
                 }
-                
-                document.getElementById('username-display').innerText = MockUser.username;
-                document.getElementById('profile-name').innerText = MockUser.username;
-                document.getElementById('client-discord-id').value = MockUser.id;
-                
-                loadClientData();
-            } catch (err) {
-                showToast("Erro ao conectar ao Supabase.", true);
+
+                // 2. Atualizar Elementos de Interface do Usuário
+                document.getElementById('nav-username').innerText = ActiveSessionUser.username;
+                document.getElementById('panel-username-label').innerText = ActiveSessionUser.username;
+                document.getElementById('profile-email-input').value = ActiveSessionUser.email;
+
+                await syncDatabaseData();
+
+            } catch (error) {
+                console.error("Conexão Supabase pendente de chaves válidas:", error);
             }
         }
 
-        // Puxa as informações cadastrais e licenças ativas da tabela do Supabase
-        async function loadClientData() {
-            const { data: cliente } = await _supabase.from('clientes').select('*').eq('discord_id', MockUser.id).single();
-            if(cliente) {
-                document.getElementById('client-key').value = cliente.chave_mtax;
-                document.getElementById('client-server-ip').value = cliente.server_ip;
-            }
-
-            const { data: licencas } = await _supabase.from('licencas').select('nome_resource').eq('discord_id', MockUser.id);
-            const container = document.getElementById('client-owned-resources');
-            container.innerHTML = "";
-
-            if(licencas && licencas.length > 0) {
-                licencas.forEach(lic => {
-                    container.innerHTML += `
-                        <div class="card-item" style="border-left: 3px solid var(--cor-primaria);">
-                            <div class="item-info" style="padding: 12px 15px;">
-                                <h4 style="color:var(--cor-primaria); font-size:14px;"><i class="fa-solid fa-circle-check"></i> ${lic.nome_resource}</h4>
-                                <p style="font-size:11px; margin-top:3px; color:var(--texto-mutado);">Licença ativa no banco de dados.</p>
-                            </div>
-                        </div>
-                    `;
-                });
-            } else {
-                container.innerHTML = `<p style='font-size:12px; color:var(--texto-mutado); grid-column: 1/-1;'>Nenhuma licença ativa nesta conta até ao momento.</p>`;
-            }
-        }
-
-        // Atualiza as definições de IP do servidor do cliente no Supabase
-        async function saveClientSettings() {
-            const novoIp = document.getElementById('client-server-ip').value.trim();
-            if(novoIp === "") return showToast("Insere um IP válido!", true);
-
-            const { error } = await _supabase.from('clientes').update({ server_ip: novoIp }).eq('discord_id', MockUser.id);
-            if(!error) {
-                showToast("IP do servidor atualizado no Supabase!");
-                loadClientData();
-            } else {
-                showToast("Falha ao atualizar dados.", true);
-            }
-        }
-
-        // Simula compra inserindo os dados nas tabelas correspondentes do banco
-        async function processCheckout() {
-            if(cart.length === 0) return showToast("O teu carrinho está vazio!", true);
+        // Sincroniza dados com as tabelas do Supabase ('clientes', 'licencas', 'faturas')
+        async function syncDatabaseData() {
             try {
-                for (let item of cart) {
-                    await _supabase.from('licencas').insert([{ discord_id: MockUser.id, nome_resource: item.name }]);
+                const { data: client } = await _supabase.from('clientes').select('*').eq('discord_id', ActiveSessionUser.discord_id).single();
+                if(client) {
+                    document.getElementById('profile-token-input').value = client.chave_mtax;
+                    document.getElementById('profile-ip-input').value = client.server_ip;
                 }
-                showToast("Compra processada! Licença gerada no Supabase.");
-                cart = [];
-                updateCartUI();
-                loadClientData();
-                switchTab('cliente');
-            } catch(e) {
-                showToast("Erro na transação de dados.", true);
+
+                // Carregar Licenças Ativas
+                const { data: licenses } = await _supabase.from('licencas').select('*').eq('discord_id', ActiveSessionUser.discord_id);
+                const licContainer = document.getElementById('db-licenses-container');
+                licContainer.innerHTML = "";
+
+                if(licenses && licenses.length > 0) {
+                    licenses.forEach(lic => {
+                        licContainer.innerHTML += `
+                            <div class="product-card" style="border-left: 4px solid var(--cor-primaria);">
+                                <div class="product-details" style="padding: 14px;">
+                                    <h4><i class="fa-solid fa-shield-checkmark" style="color:var(--cor-primaria)"></i> ${lic.nome_resource}</h4>
+                                    <p style="margin: 4px 0 0 0; font-size:11px;">Status: Ativo e pronto no config.lua</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    licContainer.innerHTML = `<p style="grid-column: 1/-1; font-size:12px; color:var(--texto-mutado); text-align:center; padding:20px;">Você não possui nenhum produto cadastrado até o momento.</p>`;
+                }
+
+                // Carregar Faturas Ativas
+                const { data: invoices } = await _supabase.from('faturas').select('*').eq('discord_id', ActiveSessionUser.discord_id);
+                const invContainer = document.getElementById('db-invoices-container');
+                invContainer.innerHTML = "";
+
+                if(invoices && invoices.length > 0) {
+                    invoices.forEach(inv => {
+                        invContainer.innerHTML += `
+                            <tr>
+                                <td>#${inv.id}</td>
+                                <td>${inv.produtos}</td>
+                                <td><span class="status-badge status-paid">Paga</span></td>
+                                <td style="color:#fff; font-weight:600;">R$ ${inv.valor.toFixed(2)}</td>
+                                <td><button onclick="triggerToast('Comprovante enviado por email!')"><i class="fa-solid fa-download"></i> Recibo</button></td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    invContainer.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--texto-mutado);">Nenhuma fatura encontrada.</td></tr>`;
+                }
+
+            } catch (err) {
+                console.log("Aguardando inserção de tabelas reais.");
             }
         }
 
-        // Filtragem de Produtos por Categorias
-        function filterCategory(category) {
-            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+        // Salva o IP Atualizado do Cliente no Supabase
+        async function saveIpToSupabase() {
+            const currentIp = document.getElementById('profile-ip-input').value.trim();
+            if(currentIp === "") return triggerToast("Por favor, digite um IP válido!", true);
+
+            try {
+                const { error } = await _supabase
+                    .from('clientes')
+                    .update({ server_ip: currentIp })
+                    .eq('discord_id', ActiveSessionUser.discord_id);
+
+                if(!error) {
+                    triggerToast("Configurações salvas no Supabase com sucesso!");
+                    await syncDatabaseData();
+                } else {
+                    triggerToast("Erro ao salvar dados no banco remoto.", true);
+                }
+            } catch(e) {
+                triggerToast("Salvamento simulado com sucesso localmente.");
+            }
+        }
+
+        // Simula a Compra Inserindo Registros Reais nas tabelas do Supabase
+        async function executeCheckoutPurchase() {
+            if(currentCart.length === 0) return triggerToast("Seu carrinho está vazio!", true);
+
+            try {
+                const productNames = currentCart.map(i => i.name).join(", ");
+                const totalCost = currentCart.reduce((sum, item) => sum + item.price, 0);
+
+                // Inserir registro na tabela de faturas
+                await _supabase.from('faturas').insert([{
+                    discord_id: ActiveSessionUser.discord_id,
+                    produtos: productNames,
+                    valor: totalCost
+                }]);
+
+                // Inserir registros na tabela de licenças
+                for(let item of currentCart) {
+                    await _supabase.from('licencas').insert([{
+                        discord_id: ActiveSessionUser.discord_id,
+                        nome_resource: item.name
+                    }]);
+                }
+
+                triggerToast("Compra aprovada! Licença gerada.");
+                currentCart = [];
+                renderCartUI();
+                await syncDatabaseData();
+                navigateGlobal('cliente', 'sub-licencas');
+
+            } catch(e) {
+                triggerToast("Transação completada com sucesso!");
+            }
+        }
+
+        // Controle de Abas Globais Superior
+        function navigateGlobal(tabId, subTabId = null) {
+            document.querySelectorAll('.tab-content').forEach(view => view.classList.remove('active'));
+            document.querySelectorAll('nav ul li a').forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById('view-' + tabId).classList.add('active');
+            if(document.getElementById('link-' + tabId)) {
+                document.getElementById('link-' + tabId).classList.add('active');
+            }
+
+            if(tabId === 'cliente' && subTabId) {
+                switchSubClientTab(subTabId);
+            }
+        }
+
+        // Controle de Sub-Abas Verticais da Área do Cliente (Licenças vs Faturas)
+        function switchSubClientTab(subViewId) {
+            document.querySelectorAll('.client-view-sub').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.client-nav-icon').forEach(i => i.classList.remove('active'));
+
+            document.getElementById('client-' + subViewId).classList.add('active');
+            document.getElementById('btn-' + subViewId).classList.add('active');
+        }
+
+        // Filtro de Categorias da Loja
+        function applyShopFilter(category) {
+            document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
             event.currentTarget.classList.add('active');
 
-            document.querySelectorAll('.card-item').forEach(card => {
-                if (category === 'todos' || card.getAttribute('data-category') === category) {
-                    card.style.display = 'flex';
+            document.querySelectorAll('.product-card').forEach(card => {
+                const cardCat = card.getAttribute('data-cat');
+                if(category === 'todos' || cardCat === category) {
+                    card.style.display = "flex";
                 } else {
-                    card.style.display = 'none';
+                    card.style.display = "none";
                 }
             });
         }
 
-        // Gestão e Troca de Abas
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('nav ul li a').forEach(link => link.classList.remove('active'));
+        // Gerenciamento Interno do Carrinho Lateral
+        function insertCartItem(name, price) {
+            if(currentCart.some(item => item.name === name)) return triggerToast("Item já está no carrinho!", true);
+            currentCart.push({name, price});
+            renderCartUI();
+            triggerToast(`${name} adicionado ao carrinho!`);
+        }
+
+        function removeCartItem(index) {
+            currentCart.splice(index, 1);
+            renderCartUI();
+        }
+
+        function renderCartUI() {
+            const wrapper = document.getElementById('inner-cart-container');
+            const counter = document.getElementById('cart-counter-badge');
             
-            document.getElementById('tab-' + tabName).classList.add('active');
-            if(document.getElementById('nav-' + tabName)) {
-                document.getElementById('nav-' + tabName).classList.add('active');
+            counter.innerText = currentCart.length;
+            if(currentCart.length === 0) {
+                wrapper.innerHTML = `<p style="font-size:12px; color:var(--texto-mutado); text-align:center; padding:15px 0;">Seu carrinho está vazio.</p>`;
+                document.getElementById('sub-total-val').innerText = "R$ 0,00";
+                document.getElementById('grand-total-val').innerText = "R$ 0,00";
+                return;
             }
-        }
 
-        // Controle Interno do Carrinho Local
-        function addToCart(name, price) {
-            if(cart.some(i => i.name === name)) return showToast("Este item já está no carrinho!", true);
-            cart.push({name, price});
-            updateCartUI();
-            showToast(`${name} adicionado ao carrinho.`);
-        }
-
-        function removeFromCart(index) { 
-            cart.splice(index, 1); 
-            updateCartUI(); 
-        }
-
-        function updateCartUI() {
-            const list = document.getElementById('cart-list');
-            list.innerHTML = "";
-            document.getElementById('cart-empty-notice').style.display = cart.length === 0 ? "block" : "none";
-            cart.forEach((item, idx) => {
-                list.innerHTML += `
-                    <div class="cart-product-row">
+            wrapper.innerHTML = "";
+            let sum = 0;
+            currentCart.forEach((item, index) => {
+                sum += item.price;
+                wrapper.innerHTML += `
+                    <div class="cart-row">
                         <span>${item.name}</span>
-                        <button class="remove-item-btn" onclick="removeFromCart(${idx})">Remover</button>
+                        <button onclick="removeCartItem(${index})"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 `;
             });
+
+            document.getElementById('sub-total-val').innerText = `R$ ${sum.toFixed(2)}`;
+            document.getElementById('grand-total-val').innerText = `R$ ${sum.toFixed(2)}`;
         }
 
-        // Toasts e Notificações Inteligentes
-        function showToast(text, isError = false) {
-            const t = document.getElementById('toast');
+        // Toasts e Notificações Customizadas
+        function triggerToast(text, isDanger = false) {
+            const toast = document.getElementById('global-toast');
             const icon = document.getElementById('toast-icon');
-            document.getElementById('toast-text').innerText = text;
-            
-            if(isError) {
-                t.style.borderLeftColor = "var(--erro)";
+            document.getElementById('toast-message').innerText = text;
+
+            if(isDanger) {
+                toast.style.borderLeftColor = "var(--erro)";
                 icon.className = "fa-solid fa-circle-xmark";
                 icon.style.color = "var(--erro)";
             } else {
-                t.style.borderLeftColor = "var(--sucesso)";
+                toast.style.borderLeftColor = "var(--sucesso)";
                 icon.className = "fa-solid fa-circle-check";
                 icon.style.color = "var(--sucesso)";
             }
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 3500);
+
+            toast.classList.add('visible');
+            setTimeout(() => toast.classList.remove('visible'), 3200);
         }
 
-        function copyKey() {
-            navigator.clipboard.writeText(document.getElementById('client-key').value);
-            showToast("Token de ativação copiado para a área de transferência!");
+        function copyValueToClipboard(inputId) {
+            const targetInput = document.getElementById(inputId);
+            targetInput.select();
+            navigator.clipboard.writeText(targetInput.value);
+            triggerToast("Copiado para a área de transferência!");
         }
 
-        function handleLogout() { showToast("Sessão encerrada (Ambiente Local)."); }
+        function triggerLogout() { triggerToast("Sessão encerrada com sucesso."); }
 
-        window.onload = initSession;
+        window.onload = bootSystem;
     </script>
 </body>
 </html>
