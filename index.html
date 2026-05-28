@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trust Store | Resources & Mapas MTA:SA</title>
-    <!-- Fontes e Ícones -->
+    <title>Trust Store | Sistema de Licenciamento Supabase</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
         :root {
             --bg-principal: #0b121f;
@@ -21,659 +22,118 @@
             --sucesso: #2ecc71;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background-color: var(--bg-principal);
-            color: var(--texto-claro);
-            overflow-x: hidden;
-        }
-
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.4s ease-in-out forwards;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
+        body { background-color: var(--bg-principal); color: var(--texto-claro); overflow-x: hidden; }
+        .tab-content { display: none; animation: fadeIn 0.4s ease-in-out forwards; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* NAVBAR */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 8%;
-            background-color: rgba(11, 18, 31, 0.95);
-            border-bottom: 1px solid var(--borda);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 22px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
+        header { display: flex; justify-content: space-between; align-items: center; padding: 18px 8%; background-color: rgba(11, 18, 31, 0.95); border-bottom: 1px solid var(--borda); position: sticky; top: 0; z-index: 1000; }
+        .logo-container { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 700; cursor: pointer; }
         .logo-container span { color: var(--cor-primaria); }
-
-        .logo-img-wrapper {
-            width: 35px;
-            height: 35px;
-            background-image: url('{65904B0D-BACA-4ABC-B10B-C0D7E90BDD53}.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-        }
-
-        nav ul li a {
-            font-weight: 500;
-            font-size: 14px;
-            color: var(--texto-mutado);
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        nav ul li a:hover, nav ul li a.active {
-            color: var(--texto-claro);
-            border-bottom: 2px solid var(--cor-primaria);
-            padding-bottom: 4px;
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+        .logo-img-wrapper { width: 35px; height: 35px; background-image: url('{65904B0D-BACA-4ABC-B10B-C0D7E90BDD53}.png'); background-size: contain; background-repeat: no-repeat; background-position: center; }
+        nav ul { display: flex; list-style: none; gap: 30px; }
+        nav ul li a { font-weight: 500; font-size: 14px; color: var(--texto-mutado); cursor: pointer; transition: color 0.3s; }
+        nav ul li a:hover, nav ul li a.active { color: var(--texto-claro); border-bottom: 2px solid var(--cor-primaria); padding-bottom: 4px; }
+        .user-menu { display: flex; align-items: center; gap: 20px; }
 
         /* Dropdown Perfil */
-        .profile-wrapper {
-            position: relative;
-            display: inline-block;
-        }
-
-        .profile-badge {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
-            font-weight: 500;
-            background: rgba(255,255,255,0.02);
-            padding: 6px 14px;
-            border-radius: 20px;
-            border: 1px solid var(--borda);
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .profile-badge img {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-        }
-
-        .profile-dropdown {
-            display: none;
-            position: absolute;
-            right: 0;
-            top: 40px;
-            background-color: var(--bg-card);
-            border: 1px solid var(--borda);
-            border-radius: 6px;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px rgba(0,0,0,0.4);
-            z-index: 1001;
-            overflow: hidden;
-        }
-
-        .profile-dropdown a {
-            color: #fff;
-            padding: 12px 16px;
-            font-size: 13px;
-            display: block;
-            transition: 0.2s;
-            cursor: pointer;
-        }
-
-        .profile-dropdown a:hover {
-            background-color: rgba(255,255,255,0.05);
-            color: var(--cor-primaria);
-        }
-
-        .profile-wrapper:hover .profile-dropdown {
-            display: block;
-        }
-
-        .btn-discord-login {
-            background-color: #5865F2;
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.3s;
-        }
-
+        .profile-wrapper { position: relative; display: inline-block; }
+        .profile-badge { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; background: rgba(255,255,255,0.02); padding: 6px 14px; border-radius: 20px; border: 1px solid var(--borda); cursor: pointer; user-select: none; }
+        .profile-badge img { width: 24px; height: 24px; border-radius: 50%; }
+        .profile-dropdown { display: none; position: absolute; right: 0; top: 40px; background-color: var(--bg-card); border: 1px solid var(--borda); border-radius: 6px; min-width: 160px; box-shadow: 0px 8px 16px rgba(0,0,0,0.4); z-index: 1001; overflow: hidden; }
+        .profile-dropdown a { color: #fff; padding: 12px 16px; font-size: 13px; display: block; transition: 0.2s; cursor: pointer; }
+        .profile-dropdown a:hover { background-color: rgba(255,255,255,0.05); color: var(--cor-primaria); }
+        .profile-wrapper:hover .profile-dropdown { display: block; }
+        
+        .btn-discord-login { background-color: #5865F2; color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 500; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
         .btn-discord-login:hover { background-color: #4752C4; }
+        .cart-icon { position: relative; cursor: pointer; }
 
-        .cart-icon {
-            position: relative;
-            cursor: pointer;
-        }
-
-        /* HERO SECTION */
-        .hero {
-            position: relative;
-            padding: 80px 8% 40px 8%;
-            background: radial-gradient(circle at top right, rgba(244, 157, 18, 0.05), transparent 60%);
-        }
-
-        .tag-novo {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background-color: rgba(244, 157, 18, 0.1);
-            border: 1px solid rgba(244, 157, 18, 0.2);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--texto-claro);
-            margin-bottom: 20px;
-        }
-
-        .tag-novo i { color: var(--cor-primaria); }
-        .hero h1 { font-size: 52px; font-weight: 800; }
-        .hero h1 span { color: var(--cor-primaria); }
-        .hero p { color: var(--texto-mutado); max-width: 550px; font-size: 14px; line-height: 1.6; margin-top: 10px; }
-
-        .btn-gold {
-            background-color: var(--cor-primaria);
-            color: #000;
-            padding: 12px 28px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 14px;
-            border: none;
-            cursor: pointer;
-            display: inline-block;
-            margin-top: 25px;
-            transition: 0.3s;
-        }
-
-        .btn-gold:hover { background-color: var(--cor-primaria-hover); transform: translateY(-2px); }
-
-        .social-icons-hero {
-            position: absolute;
-            right: 8%;
-            top: 45%;
-            display: flex;
-            gap: 15px;
-        }
-
-        .social-icons-hero a {
-            width: 42px;
-            height: 42px;
-            background-color: rgba(255,255,255,0.02);
-            border: 1px solid var(--borda);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--cor-primaria);
-            transition: 0.3s;
-        }
-
-        .social-icons-hero a:hover { background-color: var(--cor-primaria); color: #000; }
-
-        /* COUNTERS COMPONENT */
-        .stats-bar {
-            display: flex;
-            justify-content: center;
-            gap: 100px;
-            padding: 40px 0;
-            margin: 40px 8%;
-            border-top: 1px solid var(--borda);
-            border-bottom: 1px solid var(--borda);
-        }
-
-        .stat-node { display: flex; align-items: center; gap: 20px; }
-        .stat-node i { font-size: 32px; color: var(--cor-primaria); }
-        .stat-node h2 { font-size: 28px; font-weight: 700; line-height: 1; }
-        .stat-node p { color: var(--texto-mutado); font-size: 13px; }
-
-        /* PARCEIROS MARQUEE */
-        .parceiros-container { text-align: center; padding: 30px 0; }
-        .parceiros-title { font-size: 15px; font-weight: 600; margin-bottom: 20px; }
-        .parceiros-title span { color: var(--cor-primaria); }
-        
-        .marquee-logos {
-            display: flex;
-            justify-content: center;
-            gap: 60px;
-            align-items: center;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.02) 50%, transparent);
-            padding: 15px 0;
-        }
-
-        .logo-partner { height: 35px; opacity: 0.4; filter: grayscale(1); transition: 0.3s; }
-        .logo-partner:hover { opacity: 0.9; filter: grayscale(0); }
-
-        /* TOP COMPRADORES */
-        .top-compradores { padding: 60px 8%; text-align: center; }
-        .section-title { font-size: 22px; font-weight: 700; margin-bottom: 40px; }
-        .section-title span { color: var(--cor-primaria); }
-        .podium-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; max-width: 900px; margin: 0 auto; }
-        
-        .buyer-card { background-color: rgba(255,255,255,0.01); border: 1px solid var(--borda); padding: 20px 10px; border-radius: 8px; }
-        .rank-tag { font-size: 12px; font-weight: 700; color: var(--cor-primaria); margin-bottom: 10px; display: block; }
-        .buyer-avatar { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--cor-primaria); margin: 0 auto 10px auto; object-fit: cover; }
-        .buyer-name { font-size: 12px; font-weight: 500; color: var(--texto-claro); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-        /* INTERFACE DA LOJA */
+        /* LOJA WORKSPACE */
         .shop-banner-container { padding: 30px 8% 10px 8%; }
-        .main-promo-banner { width: 100%; height: 260px; background-image: url('{AABB5039-2A08-4B3A-81FE-DC2B32DC7A6E}.jpg'); background-size: cover; background-position: center; border-radius: 8px; border: 1px solid var(--borda); }
-
-        .shop-workspace {
-            padding: 20px 8% 80px 8%;
-            display: grid;
-            grid-template-columns: 3fr 1.4fr;
-            gap: 30px;
-        }
-
-        .filter-panel { grid-column: 1 / -1; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 20px; background-color: var(--bg-card); border: 1px solid var(--borda); padding: 20px; border-radius: 8px; margin-bottom: 10px; }
-        .filter-node { display: flex; flex-direction: column; gap: 8px; }
-        .filter-node label { font-size: 11px; color: var(--texto-mutado); text-transform: uppercase; font-weight: 600; }
-        .input-wrap { position: relative; }
-        .input-wrap input { width: 100%; background: var(--bg-input); border: 1px solid var(--borda); padding: 10px 15px; border-radius: 6px; color: #fff; outline: none; font-size: 13px; }
-        .input-wrap i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--texto-mutado); }
-        .filter-node select { background: var(--bg-input); border: 1px solid var(--borda); padding: 10px 15px; border-radius: 6px; color: #fff; outline: none; font-size: 13px; cursor: pointer; }
-
+        .main-promo-banner { width: 100%; height: 180px; background-image: url('{AABB5039-2A08-4B3A-81FE-DC2B32DC7A6E}.jpg'); background-size: cover; background-position: center; border-radius: 8px; border: 1px solid var(--borda); }
+        .shop-workspace { padding: 20px 8% 80px 8%; display: grid; grid-template-columns: 3fr 1.4fr; gap: 30px; }
         .shop-items-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 
         /* CARDS */
-        .card-item { background-color: var(--bg-card); border: 1px solid var(--borda); border-radius: 8px; overflow: hidden; transition: 0.3s; text-align: left; display: flex; flex-direction: column; }
+        .card-item { background-color: var(--bg-card); border: 1px solid var(--borda); border-radius: 8px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; }
         .card-item:hover { transform: translateY(-5px); border-color: rgba(244, 157, 18, 0.3); }
-        .item-banner { width: 100%; height: 180px; background-size: cover; background-position: center; position: relative; }
-        .item-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .item-info h4 { font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #fff; }
-        .price-tag { color: var(--cor-primaria); font-weight: 700; font-size: 16px; margin-bottom: 15px; }
-
-        .action-row-shop { display: grid; grid-template-columns: 45px 1fr; gap: 8px; }
+        .item-banner { width: 100%; height: 150px; background-size: cover; background-position: center; }
+        .item-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .item-info h4 { font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+        .price-tag { color: var(--cor-primaria); font-weight: 700; font-size: 15px; margin-bottom: 10px; }
+        .action-row-shop { display: grid; grid-template-columns: 40px 1fr; gap: 5px; }
         
-        .btn-cart-add-small {
-            background: var(--cor-primaria);
-            color: #000;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 14px;
-            transition: 0.2s;
-        }
+        .btn-cart-add-small { background: var(--cor-primaria); color: #000; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; transition: 0.2s; }
         .btn-cart-add-small:hover { background: var(--cor-primaria-hover); }
+        .btn-card-info { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--texto-claro); padding: 8px; border-radius: 6px; font-size: 11px; cursor: pointer; }
 
-        .btn-card-info {
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.1);
-            color: var(--texto-claro);
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-        }
-        .btn-card-info:hover { background: rgba(255,255,255,0.05); }
-
-        /* CARRINHO SIDEBAR CONTROLLER */
-        .checkout-sidebar { background-color: var(--bg-card); border: 1px solid var(--borda); border-radius: 8px; padding: 25px; height: fit-content; }
-        .sidebar-head { font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 10px; margin-bottom: 25px; }
+        /* SIDEBAR */
+        .checkout-sidebar { background-color: var(--bg-card); border: 1px solid var(--borda); border-radius: 8px; padding: 20px; height: fit-content; }
+        .sidebar-head { font-size: 14px; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
         .sidebar-head i { color: var(--cor-primaria); }
+        .cart-items-container { max-height: 200px; overflow-y: auto; }
+        .cart-product-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.02); font-size: 12px; }
+        .remove-item-btn { color: #ff4757; background: none; border: none; cursor: pointer; }
+        .empty-basket { text-align: center; padding: 20px 0; color: var(--texto-mutado); font-size: 12px; }
+        .btn-checkout-confirm { width: 100%; background: var(--cor-primaria); color: #000; font-weight: 600; padding: 10px; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; margin-top: 15px; }
 
-        /* Itens no carrinho */
-        .cart-items-container { max-height: 240px; overflow-y: auto; margin-bottom: 15px; }
-        .cart-product-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.02); }
-        .cart-product-row span { font-size: 13px; font-weight: 500; }
-        .cart-product-row .remove-item-btn { color: #ff4757; cursor: pointer; font-size: 13px; background: none; border: none; }
+        /* ÁREA DO CLIENTE */
+        .client-area-workspace { padding: 40px 8% 80px 8%; display: grid; grid-template-columns: 1fr 300px; gap: 30px; }
+        .client-sidebar-profile { background-color: var(--bg-card); border: 1px solid var(--borda); border-radius: 8px; padding: 25px 20px; text-align: center; height: fit-content; }
+        .client-big-avatar { width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--cor-primaria); margin-bottom: 10px; }
+        .client-info-card { background-color: var(--bg-input); border: 1px solid var(--borda); border-radius: 6px; padding: 10px; margin-bottom: 10px; text-align: left; position: relative; }
+        .client-info-card label { font-size: 9px; color: var(--texto-mutado); text-transform: uppercase; display: block; }
+        .client-info-card input { font-size: 12px; background: transparent; border: none; color: #fff; width: 85%; outline: none; margin-top: 2px; }
+        .client-info-card i { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--texto-mutado); cursor: pointer; }
+        .btn-save-config { width: 100%; background: var(--cor-primaria); color: #000; font-weight: 600; padding: 10px; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; }
 
-        .empty-basket { text-align: center; padding: 30px 0; color: var(--texto-mutado); }
-        .empty-basket i { font-size: 40px; color: rgba(255,255,255,0.03); margin-bottom: 12px; display: block; }
-        .empty-basket p { font-size: 13px; font-weight: 500; color: #ced5de; }
-        .empty-basket span { font-size: 11px; display: block; margin-top: 5px; }
-
-        .cart-form-group { margin-top: 20px; border-top: 1px dashed var(--borda); padding-top: 15px; }
-        .cart-field-title { font-size: 11px; color: var(--texto-mutado); font-weight: 600; text-transform: uppercase; margin-bottom: 8px; }
-        
-        .coupon-box { display: flex; background: var(--bg-input); border: 1px solid var(--borda); border-radius: 6px; padding: 10px 15px; justify-content: space-between; align-items: center; }
-        .coupon-box input { background: transparent; border: none; color: #fff; outline: none; font-size: 13px; width: 80%; }
-        .coupon-box i { color: var(--texto-mutado); }
-
-        .select-payment { width: 100%; background: var(--bg-input); border: 1px solid var(--borda); padding: 10px 15px; border-radius: 6px; color: #fff; font-size: 13px; outline: none; margin-bottom: 15px; cursor: pointer; }
-
-        .summary-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: var(--texto-mutado); }
-        .summary-row.total-row { color: #fff; font-weight: 600; font-size: 14px; margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--borda); }
-
-        .terms-checkbox { display: flex; gap: 10px; align-items: flex-start; margin: 20px 0; font-size: 11px; color: var(--texto-mutado); line-height: 1.4; }
-        .terms-checkbox input { margin-top: 2px; accent-color: var(--cor-primaria); }
-        .terms-checkbox a { color: var(--cor-primaria); cursor: pointer; }
-
-        .btn-checkout-confirm { width: 100%; background: #c2821b; color: #fff; font-weight: 600; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; transition: 0.3s; }
-        .btn-checkout-confirm:hover { background: var(--cor-primaria); color: #000; }
-
-        /* ÁREA DO CLIENTE DOCKYARD */
-        .client-area-workspace {
-            padding: 40px 8% 80px 8%;
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 30px;
-        }
-
-        .client-sidebar-profile { background-color: var(--bg-card); border: 1px solid var(--borda); border-radius: 8px; padding: 30px 20px; text-align: center; height: fit-content; }
-        .client-big-avatar { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--cor-primaria); margin-bottom: 15px; }
-        .client-username { font-size: 16px; font-weight: 700; margin-bottom: 25px; }
-        
-        .client-info-card { background-color: var(--bg-input); border: 1px solid var(--borda); border-radius: 6px; padding: 12px; margin-bottom: 12px; text-align: left; position: relative; }
-        .client-info-card label { font-size: 10px; color: var(--texto-mutado); text-transform: uppercase; display: block; margin-bottom: 4px; }
-        .client-info-card input, .client-info-card span { font-size: 12px; font-weight: 500; background: transparent; border: none; color: #fff; width: 85%; outline: none; }
-        .client-info-card i { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--texto-mutado); cursor: pointer; transition: 0.2s; }
-        .client-info-card i:hover { color: #fff; }
-
-        .btn-save-config { width: 100%; background: var(--cor-primaria); color: #000; font-weight: 600; padding: 10px; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; margin-top: 15px; }
-
-        .tutorials-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 40px; }
-        .tutorial-video-card { background: var(--bg-card); border: 1px solid var(--borda); border-radius: 8px; overflow: hidden; cursor: pointer; }
-        .tutorial-thumb { width: 100%; height: 100px; background-size: cover; background-position: center; position: relative; display: flex; justify-content: center; align-items: center; }
-        .tutorial-thumb::before { content: ""; position: absolute; width:100%; height:100%; background: rgba(0,0,0,0.4); }
-        .tutorial-thumb i { font-size: 24px; color: #fff; position: relative; z-index: 1; opacity: 0.8; }
-        .tutorial-video-card p { font-size: 11px; font-weight: 600; text-align: center; padding: 10px; }
-
-        /* NOTIFICAÇÃO POPUP */
-        .toast-notification { position: fixed; bottom: 20px; left: 20px; background-color: var(--bg-card); border-left: 4px solid var(--sucesso); padding: 15px 25px; border-radius: 4px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); z-index: 2000; font-size: 13px; transform: translateX(-150%); transition: transform 0.3s ease; }
+        /* TOAST */
+        .toast-notification { position: fixed; bottom: 20px; left: 20px; background-color: var(--bg-card); border-left: 4px solid var(--sucesso); padding: 12px 20px; border-radius: 4px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); z-index: 2000; font-size: 12px; transform: translateX(-150%); transition: transform 0.3s ease; }
         .toast-notification.show { transform: translateX(0); }
-        .toast-notification i { color: var(--sucesso); }
-
-        /* PERGUNTAS FREQUENTES (FAQ) */
-        .faq-section { padding: 40px 8% 80px 8%; display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; }
-        .faq-left h3 { font-size: 26px; font-weight: 700; }
-        .faq-left h3 span { color: var(--cor-primaria); }
-        .faq-left p { color: var(--texto-mutado); font-size: 13px; margin-top: 10px; margin-bottom: 25px; }
-        .faq-socials { display: flex; gap: 15px; }
-        .faq-socials a { color: var(--texto-mutado); font-size: 16px; transition: 0.3s; }
-        .faq-socials a:hover { color: var(--cor-primaria); }
-
-        .accordion-item { background-color: var(--bg-card); border: 1px solid var(--borda); border-radius: 6px; margin-bottom: 12px; overflow: hidden; }
-        .accordion-header { padding: 18px 20px; font-size: 13px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; }
-        .accordion-header i { transition: transform 0.3s; color: var(--texto-mutado); }
-        .accordion-item.open .accordion-header { border-bottom: 1px solid var(--borda); color: var(--cor-primaria); }
-        .accordion-item.open .accordion-header i { transform: rotate(180deg); color: var(--cor-primaria); }
-        .accordion-body { padding: 0 20px; max-height: 0; overflow: hidden; transition: all 0.3s ease; color: var(--texto-mutado); font-size: 12px; line-height: 1.6; }
-        .accordion-item.open .accordion-body { padding: 18px 20px; max-height: 200px; }
-
-        /* TERMOS DE SERVIÇO */
-        .terms-wrapper { padding: 60px 15%; }
-        .terms-wrapper h1 { font-size: 32px; font-weight: 700; text-align: center; margin-bottom: 40px; }
-        .alert-box-terms { background: rgba(244, 157, 18, 0.05); border: 1px solid rgba(244, 157, 18, 0.15); padding: 15px 20px; border-radius: 6px; font-size: 13px; font-weight: 600; margin-bottom: 35px; display: flex; gap: 10px; align-items: center; }
-        .alert-box-terms i { color: var(--cor-primaria); font-size: 16px; }
-
-        .terms-block { margin-bottom: 35px; }
-        .terms-block h3 { font-size: 16px; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        .terms-block h3 i { color: var(--cor-primaria); }
-        .terms-block ul { list-style: none; }
-        .terms-block ul li { font-size: 13px; color: var(--texto-mutado); line-height: 1.7; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; }
-        .terms-block ul li::before { content: "➔"; color: var(--cor-primaria); font-size: 11px; margin-top: 2px; }
-
-        /* RODAPÉ */
-        footer { background-color: #080d17; border-top: 1px solid var(--borda); padding: 50px 8% 30px 8%; display: grid; grid-template-columns: 2fr repeat(3, 1fr); gap: 40px; }
-        .footer-brand p { font-size: 11px; color: var(--texto-mutado); margin-top: 15px; }
-        .footer-col h5 { font-size: 12px; text-transform: uppercase; color: #fff; margin-bottom: 15px; font-weight: 600; }
-        .footer-col ul { list-style: none; }
-        .footer-col ul li { margin-bottom: 10px; }
-        .footer-col ul li a { font-size: 12px; color: var(--texto-mutado); transition: 0.3s; cursor: pointer; }
-        .footer-col ul li a:hover { color: var(--cor-primaria); }
-        .footer-socials-row { display: flex; gap: 12px; }
-        .footer-socials-row a { width: 32px; height: 32px; background: rgba(255,255,255,0.02); border: 1px solid var(--borda); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--texto-mutado); font-size: 13px; transition: 0.3s; }
-        .footer-socials-row a:hover { color: var(--cor-primaria); border-color: var(--cor-primaria); }
-
-        @media (max-width: 1024px) {
-            .shop-workspace, .faq-section, .client-area-workspace { grid-template-columns: 1fr; }
-            .shop-items-grid, .tutorials-grid { grid-template-columns: repeat(2, 1fr); }
-            .podium-grid { grid-template-columns: repeat(3, 1fr); }
-            .social-icons-hero { position: static; margin-top: 25px; }
-            footer { grid-template-columns: 1fr; gap: 30px; }
-            .stats-bar { flex-direction: column; gap: 25px; align-items: flex-start; }
-        }
     </style>
 </head>
 <body>
 
-    <!-- INTERFACE TOAST NOTIFICATION -->
     <div class="toast-notification" id="toast">
-        <i class="fa-solid fa-circle-check"></i>
-        <span id="toast-text">Configurações salvas com sucesso!</span>
+        <i class="fa-solid fa-circle-check" style="color: var(--sucesso)"></i>
+        <span id="toast-text">Notificação</span>
     </div>
 
-    <!-- CABEÇALHO -->
     <header>
-        <div class="logo-container" onclick="switchTab('inicio')">
+        <div class="logo-container" onclick="switchTab('loja')">
             <div class="logo-img-wrapper"></div>
             Trust <span>Store</span>
         </div>
         <nav>
             <ul>
-                <li><a id="nav-inicio" class="active" onclick="switchTab('inicio')">Página Inicial</a></li>
-                <li><a id="nav-loja" onclick="switchTab('loja')">Loja</a></li>
+                <li><a id="nav-loja" class="active" onclick="switchTab('loja')">Loja</a></li>
                 <li><a id="nav-cliente" onclick="switchTab('cliente')">Área do Cliente</a></li>
-                <li><a id="nav-termos" onclick="switchTab('termos')">Termos</a></li>
             </ul>
         </nav>
         
         <div class="user-menu">
-            <!-- Renderização Condicional de Sessão com Login em Discord -->
             <div id="session-logged" class="profile-wrapper">
                 <div class="profile-badge">
                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100" alt="Avatar">
-                    <span id="username-display">elzorrito1</span> <i class="fa-solid fa-angle-down" style="font-size: 11px; color: var(--texto-mutado)"></i>
+                    <span id="username-display">Carregando...</span> <i class="fa-solid fa-angle-down" style="font-size: 11px;"></i>
                 </div>
                 <div class="profile-dropdown">
-                    <a onclick="switchTab('cliente')"><i class="fa-regular fa-id-card"></i> Área do Cliente</a>
-                    <a onclick="handleLogout()"><i class="fa-solid fa-arrow-right-from-bracket" style="color: #ff4757;"></i> Desconectar</a>
+                    <a onclick="handleLogout()"><i class="fa-solid fa-arrow-right-from-bracket" style="color: #ff4757;"></i> Sair</a>
                 </div>
             </div>
-
             <button id="session-anonymous" class="btn-discord-login" style="display: none;" onclick="handleDiscordLogin()">
                 <i class="fa-brands fa-discord"></i> Entrar com Discord
             </button>
-
-            <div class="cart-icon" onclick="switchTab('loja')">
-                <i class="fa-solid fa-cart-shopping" style="font-size: 18px;"></i>
-                <span id="global-cart-counter" style="position: absolute; top: -8px; right: -10px; background: var(--cor-primaria); color: #000; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 50%">0</span>
-            </div>
         </div>
     </header>
 
-    <!-- ABA 1: PÁGINA INICIAL -->
-    <div id="tab-inicio" class="tab-content active">
-        <section class="hero">
-            <div class="tag-novo">
-                <i class="fa-solid fa-bell"></i> NOVO LANÇAMENTO: PACK DE VEGETAÇÃO 🌿
-            </div>
-            <h1>Trust <span>Store</span></h1>
-            <p>Procurando mapas de qualidade? A Trust Store possui os melhores mapas a pronta entrega do MTA:SA.</p>
-            <button class="btn-gold" onclick="switchTab('loja')">Ver Produtos</button>
-
-            <div class="social-icons-hero">
-                <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#"><i class="fa-brands fa-discord"></i></a>
-                <a href="#"><i class="fa-brands fa-youtube"></i></a>
-                <a href="#"><i class="fa-brands fa-tiktok"></i></a>
-            </div>
-        </section>
-
-        <!-- CONTADORES -->
-        <div class="stats-bar">
-            <div class="stat-node">
-                <i class="fa-regular fa-user"></i>
-                <div>
-                    <h2>+2027</h2>
-                    <p>clientes</p>
-                </div>
-            </div>
-            <div class="stat-node">
-                <i class="fa-solid fa-box-open"></i>
-                <div>
-                    <h2>+73</h2>
-                    <p>produtos</p>
-                </div>
-            </div>
-            <div class="stat-node">
-                <i class="fa-solid fa-store"></i>
-                <div>
-                    <h2>+4</h2>
-                    <p>anos de loja</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- MARQUEE PARCEIROS -->
-        <div class="parceiros-container">
-            <div class="parceiros-title">🤝 Parceiros <span>Oficiais</span></div>
-            <div class="marquee-logos">
-                <img class="logo-partner" src="{4D5F2674-F8B0-4F10-8E7C-A304B6FFD5BF}.jpg" alt="HS">
-                <img class="logo-partner" src="{6EC64841-9B7A-4B7F-ADF6-5B75B276517A}.png" alt="MTAX">
-                <img class="logo-partner" src="{4D5F2674-F8B0-4F10-8E7C-A304B6FFD5BF}.jpg" alt="HS">
-                <img class="logo-partner" src="{6EC64841-9B7A-4B7F-ADF6-5B75B276517A}.png" alt="MTAX">
-            </div>
-        </div>
-
-        <!-- PODIUM TOP COMPRADORES -->
-        <section class="top-compradores">
-            <div class="section-title">Top <span>Compradores</span></div>
-            <div class="podium-grid">
-                <div class="buyer-card">
-                    <span class="rank-tag">1º</span>
-                    <img class="buyer-avatar" src="https://via.placeholder.com/50" alt="avatar">
-                    <div class="buyer-name">manoarabe.</div>
-                </div>
-                <div class="buyer-card">
-                    <span class="rank-tag">2º</span>
-                    <img class="buyer-avatar" src="https://via.placeholder.com/50" alt="avatar">
-                    <div class="buyer-name">raydemify</div>
-                </div>
-                <div class="buyer-card">
-                    <span class="rank-tag">3º</span>
-                    <img class="buyer-avatar" src="https://via.placeholder.com/50" alt="avatar">
-                    <div class="buyer-name">eotobitahtwidah</div>
-                </div>
-                <div class="buyer-card">
-                    <span class="rank-tag">4º</span>
-                    <img class="buyer-avatar" src="https://via.placeholder.com/50" alt="avatar">
-                    <div class="buyer-name">ceo_cbr</div>
-                </div>
-                <div class="buyer-card">
-                    <span class="rank-tag">5º</span>
-                    <img class="buyer-avatar" src="https://via.placeholder.com/50" alt="avatar">
-                    <div class="buyer-name">yjoga</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ACCORDION FAQ -->
-        <section class="faq-section">
-            <div class="faq-left">
-                <h3>Perguntas <span>Frequentes</span></h3>
-                <p>Aqui você encontra respostas para as dúvidas mais comuns sobre as modelagens 3D para MTA:SA</p>
-                <div class="faq-socials">
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-discord"></i></a>
-                </div>
-            </div>
-            <div class="faq-right">
-                <div class="accordion-item open">
-                    <div class="accordion-header" onclick="toggleAccordion(this)">
-                        A loja é confiável? <i class="fa-solid fa-angle-down"></i>
-                    </div>
-                    <div class="accordion-body">
-                        Com certeza! A Trust Store é altamente confiável, com mais de 1.900 clientes satisfeitos. Nosso foco é oferecer a melhor experiência em modelagens de MTA, garantindo criptografia robusta de ponta.
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <div class="accordion-header" onclick="toggleAccordion(this)">
-                        Como recebo meus produtos? <i class="fa-solid fa-angle-down"></i>
-                    </div>
-                    <div class="accordion-body">
-                        O envio é instantâneo e automatizado. Assim que o pagamento for liquidado, seus pacotes e arquivos de criptografia MTAX estarão disponíveis em sua Área do Cliente.
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- ABA 2: LOJA DE RESOURCES COMPLETA -->
-    <div id="tab-loja" class="tab-content">
-        <div class="shop-banner-container">
-            <div class="main-promo-banner"></div>
-        </div>
-
+    <div id="tab-loja" class="tab-content active">
+        <div class="shop-banner-container"><div class="main-promo-banner"></div></div>
         <div class="shop-workspace">
-            <div class="filter-panel">
-                <div class="filter-node">
-                    <label>Pesquise um Resource</label>
-                    <div class="input-wrap">
-                        <input type="text" placeholder="Pesquise aqui...">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </div>
-                </div>
-                <div class="filter-node">
-                    <label>Ordenar</label>
-                    <select>
-                        <option>Mais Recentes</option>
-                    </select>
-                </div>
-                <div class="filter-node">
-                    <label>Filtro de Valores</label>
-                    <select>
-                        <option>Todos os Valores</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- GRID COMPLETO COM TODOS OS PRODUTOS DA TRUSTSTORE -->
             <div class="shop-items-grid">
-                <!-- 1. Pack de Vegetação -->
                 <div class="card-item">
                     <div class="item-banner" style="background-image: url('{D877220A-E806-4972-AE21-B8C362B1A1A0}.png');"></div>
                     <div class="item-info">
@@ -681,47 +141,21 @@
                         <div class="price-tag">R$ 30,00</div>
                         <div class="action-row-shop">
                             <button class="btn-cart-add-small" onclick="addToCart('Pack de Vegetação', 30)"><i class="fa-solid fa-cart-shopping"></i></button>
-                            <button class="btn-card-info"><i class="fa-solid fa-circle-info"></i> Detalhes</button>
+                            <button class="btn-card-info">Detalhes</button>
                         </div>
                     </div>
                 </div>
-                <!-- 2. Posto de Gasolina -->
                 <div class="card-item">
                     <div class="item-banner" style="background-image: url('{AABB5039-2A08-4B3A-81FE-DC2B32DC7A6E}.jpg');"></div>
                     <div class="item-info">
-                        <h4>Posto de Gasolina (Remake)</h4>
+                        <h4>Posto de Gasolina</h4>
                         <div class="price-tag">R$ 45,00</div>
                         <div class="action-row-shop">
                             <button class="btn-cart-add-small" onclick="addToCart('Posto de Gasolina', 45)"><i class="fa-solid fa-cart-shopping"></i></button>
-                            <button class="btn-card-info"><i class="fa-solid fa-circle-info"></i> Detalhes</button>
+                            <button class="btn-card-info">Detalhes</button>
                         </div>
                     </div>
                 </div>
-                <!-- 3. Favela Versão 7.0 -->
-                <div class="card-item">
-                    <div class="item-banner" style="background-image: url('{4D5F2674-F8B0-4F10-8E7C-A304B6FFD5BF}.jpg');"></div>
-                    <div class="item-info">
-                        <h4>Favela Versão 7.0</h4>
-                        <div class="price-tag">R$ 40,00</div>
-                        <div class="action-row-shop">
-                            <button class="btn-cart-add-small" onclick="addToCart('Favela Versão 7.0', 40)"><i class="fa-solid fa-cart-shopping"></i></button>
-                            <button class="btn-card-info"><i class="fa-solid fa-circle-info"></i> Detalhes</button>
-                        </div>
-                    </div>
-                </div>
-                <!-- 4. Patinete System -->
-                <div class="card-item">
-                    <div class="item-banner" style="background-image: url('{D877220A-E806-4972-AE21-B8C362B1A1A0}.png');"></div>
-                    <div class="item-info">
-                        <h4>Patinete System</h4>
-                        <div class="price-tag">R$ 40,00</div>
-                        <div class="action-row-shop">
-                            <button class="btn-cart-add-small" onclick="addToCart('Patinete System', 40)"><i class="fa-solid fa-cart-shopping"></i></button>
-                            <button class="btn-card-info"><i class="fa-solid fa-circle-info"></i> Detalhes</button>
-                        </div>
-                    </div>
-                </div>
-                <!-- 5. Metrô System -->
                 <div class="card-item">
                     <div class="item-banner" style="background-image: url('{D0CBF644-4DE8-4AD0-BE5A-3E78D88F2EA9}.jpg');"></div>
                     <div class="item-info">
@@ -729,328 +163,183 @@
                         <div class="price-tag">R$ 40,00</div>
                         <div class="action-row-shop">
                             <button class="btn-cart-add-small" onclick="addToCart('Metrô System', 40)"><i class="fa-solid fa-cart-shopping"></i></button>
-                            <button class="btn-card-info"><i class="fa-solid fa-circle-info"></i> Detalhes</button>
-                        </div>
-                    </div>
-                </div>
-                <!-- 6. Academia System -->
-                <div class="card-item">
-                    <div class="item-banner" style="background-image: url('{AABB5039-2A08-4B3A-81FE-DC2B32DC7A6E}.jpg');"></div>
-                    <div class="item-info">
-                        <h4>Academia System</h4>
-                        <div class="price-tag">R$ 45,00</div>
-                        <div class="action-row-shop">
-                            <button class="btn-cart-add-small" onclick="addToCart('Academia System', 45)"><i class="fa-solid fa-cart-shopping"></i></button>
-                            <button class="btn-card-info"><i class="fa-solid fa-circle-info"></i> Detalhes</button>
+                            <button class="btn-card-info">Detalhes</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- SIDEBAR DO CARRINHO SISTÊMICA -->
             <div class="checkout-sidebar">
-                <div class="sidebar-head">
-                    <i class="fa-solid fa-cart-shopping"></i> Carrinho
-                </div>
-                
-                <div class="cart-items-container" id="cart-list">
-                    <!-- Gerado de forma automatizada via Script -->
-                </div>
-
-                <div class="empty-basket" id="cart-empty-notice">
-                    <i class="fa-solid fa-basket-shopping"></i>
-                    <p>Seu Carrinho está Vazio</p>
-                    <span>Adicione um Produto para checkout</span>
-                </div>
-
-                <div class="cart-form-group">
-                    <div class="cart-field-title">Cupom de Desconto</div>
-                    <div class="coupon-box">
-                        <input type="text" placeholder="Insira o cupom">
-                        <i class="fa-solid fa-ticket"></i>
-                    </div>
-                </div>
-
-                <div class="cart-form-group" style="border:none; padding:0; margin-top:15px;">
-                    <div class="cart-field-title">Método de Pagamento</div>
-                    <select class="select-payment">
-                        <option>Pix (Automático)</option>
-                        <option>Cartão de Crédito</option>
-                    </select>
-                </div>
-
-                <div class="summary-row">
-                    <span>Sub-Total</span>
-                    <span id="subtotal-val">R$ 0,00</span>
-                </div>
-                <div class="summary-row">
-                    <span>Desconto</span>
-                    <span id="discount-val">0%</span>
-                </div>
-                <div class="summary-row total-row">
-                    <span>Total</span>
-                    <span id="total-val">R$ 0,00</span>
-                </div>
-
-                <div class="terms-checkbox">
-                    <input type="checkbox" id="check-termos">
-                    <label for="check-termos">Eu concordo com os <a onclick="switchTab('termos')">Termos de Serviço</a></label>
-                </div>
-
-                <button class="btn-checkout-confirm" onclick="processCheckout()">Confirmar Pedido</button>
+                <div class="sidebar-head"><i class="fa-solid fa-cart-shopping"></i> Carrinho</div>
+                <div class="cart-items-container" id="cart-list"></div>
+                <div class="empty-basket" id="cart-empty-notice">O carrinho está vazio.</div>
+                <button class="btn-checkout-confirm" onclick="processCheckout()">Simular Compra</button>
             </div>
         </div>
     </div>
 
-    <!-- ABA 3: ÁREA DO CLIENTE -->
     <div id="tab-cliente" class="tab-content">
         <div class="client-area-workspace" id="client-panel-logged">
             <div>
-                <h3 style="font-size:22px; font-weight:700; margin-bottom:20px;">Tutoriais</h3>
-                
-                <!-- Grade de Vídeos de Tutoriais -->
-                <div class="tutorials-grid">
-                    <div class="tutorial-video-card">
-                        <div class="tutorial-thumb" style="background-image:url('{AABB5039-2A08-4B3A-81FE-DC2B32DC7A6E}.jpg')"><i class="fa-solid fa-play"></i></div>
-                        <p>Como ativar mapas no Host Linux</p>
-                    </div>
-                    <div class="tutorial-video-card">
-                        <div class="tutorial-thumb" style="background-image:url('{AABB5039-2A08-4B3A-81FE-DC2B32DC7A6E}.jpg')"><i class="fa-solid fa-play"></i></div>
-                        <p>Como ativar mapas no Servidor Local</p>
-                    </div>
-                    <div class="tutorial-video-card">
-                        <div class="tutorial-thumb" style="background-image:url('{AABB5039-2A08-4B3A-81FE-DC2B32DC7A6E}.jpg')"><i class="fa-solid fa-play"></i></div>
-                        <p>Como ativar mapas no Host Windows</p>
-                    </div>
-                    <div class="tutorial-video-card">
-                        <div class="tutorial-thumb" style="background-image:url('{AABB5039-2A08-4B3A-81FE-DC2B32DC7A6E}.jpg')"><i class="fa-solid fa-play"></i></div>
-                        <p>Como editar texturas dos mapas</p>
-                    </div>
-                </div>
-
-                <h3 style="font-size:22px; font-weight:700; margin-bottom:20px;">Meus Resources Comprados</h3>
+                <h3 style="font-size:18px; font-weight:700; margin-bottom:15px;">Os Teus Resources Licenciados</h3>
                 <div class="shop-items-grid" id="client-owned-resources">
-                    <!-- Carregado de forma automatizada -->
-                    <div class="card-item">
-                        <div class="item-banner" style="background-image: url('{D877220A-E806-4972-AE21-B8C362B1A1A0}.png');"></div>
-                        <div class="item-info">
-                            <h4>Metrô System</h4>
-                            <button class="btn-gold" style="width:100%; margin-top:10px; font-size:12px; padding:8px;"><i class="fa-solid fa-download"></i> Baixar Arquivo</button>
-                        </div>
                     </div>
-                </div>
             </div>
 
-            <!-- Configurações Laterais de Servidor do Cliente -->
             <div class="client-sidebar-profile">
                 <img class="client-big-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100" alt="Avatar">
-                <div class="client-username">elzorrito1</div>
+                <div class="client-username" id="profile-name">Carregando...</div>
 
                 <div class="client-info-card">
-                    <label>Seu Email</label>
-                    <input type="text" value="ptrodri3@gmail.com" readonly id="client-email">
-                    <i class="fa-regular fa-copy" onclick="copyText('ptrodri3@gmail.com')"></i>
+                    <label>Discord ID</label>
+                    <input type="text" id="client-discord-id" readonly>
                 </div>
-
                 <div class="client-info-card">
-                    <label>Sua Chave MTAX</label>
-                    <input type="text" value="B7D-9AA-9A9-B84-TRUST" readonly id="client-key">
-                    <i class="fa-regular fa-copy" onclick="copyText('B7D-9AA-9A9-B84-TRUST')"></i>
+                    <label>Chave de Ativação MTAX</label>
+                    <input type="text" id="client-key" readonly>
+                    <i class="fa-regular fa-copy" onclick="copyKey()"></i>
                 </div>
-
                 <div class="client-info-card">
                     <label>IP do Servidor Autorizado</label>
-                    <input type="text" value="135.148.161.23" id="client-server-ip">
-                    <i class="fa-regular fa-floppy-disk"></i>
+                    <input type="text" id="client-server-ip" placeholder="0.0.0.0">
                 </div>
-
-                <button class="btn-save-config" onclick="saveClientSettings()">Salvar Configurações</button>
+                <button class="btn-save-config" onclick="saveClientSettings()">Atualizar IP no Supabase</button>
             </div>
         </div>
 
-        <div id="client-panel-anonymous" style="display:none; text-align:center; padding:100px 8%;">
-            <i class="fa-solid fa-lock" style="font-size:48px; color:var(--texto-mutado); margin-bottom:20px;"></i>
+        <div id="client-panel-anonymous" style="display:none; text-align:center; padding:80px 8%;">
+            <i class="fa-solid fa-lock" style="font-size:32px; color:var(--texto-mutado); margin-bottom:15px;"></i>
             <h2>Acesso Restrito</h2>
-            <p style="color:var(--texto-mutado); margin-bottom:25px;">Você precisa estar conectado com sua conta do Discord para visualizar seus produtos.</p>
-            <button class="btn-discord-login" style="margin: 0 auto;" onclick="handleDiscordLogin()"><i class="fa-brands fa-discord"></i> Conectar com o Discord</button>
+            <p style="color:var(--texto-mutado); margin-bottom:20px;">Faz login para gerires os teus scripts.</p>
         </div>
     </div>
 
-    <!-- ABA 4: TERMOS DE SERVIÇO -->
-    <div id="tab-termos" class="tab-content">
-        <div class="terms-wrapper">
-            <h1>Termos de Serviço</h1>
-            <div class="alert-box-terms">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-                <span>Importante: nossos produtos funcionam somente no MTA:SA. Não são compatíveis com GTA SA ou SA:MP.</span>
-            </div>
-            <div class="terms-block">
-                <h3><i class="fa-solid fa-basket-shopping"></i> Regulamento de Compras</h3>
-                <ul>
-                    <li>Entrega Rápida e Automática via Gateways integrados.</li>
-                    <li>Reembolsos em até 7 dias exclusivamente por falhas técnicas nativas do resource.</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <!-- FOOTER -->
-    <footer>
-        <div class="footer-brand">
-            <div class="logo-container" style="font-size: 18px;">
-                <div class="logo-img-wrapper" style="width:28px; height:28px;"></div>
-                Trust <span>Store</span>
-            </div>
-            <p>© Todos os direitos reservados.</p>
-        </div>
-        <div class="footer-col">
-            <h5>Links</h5>
-            <ul>
-                <li><a onclick="switchTab('loja')">Produtos</a></li>
-                <li><a onclick="switchTab('cliente')">Área do Cliente</a></li>
-            </ul>
-        </div>
-        <div class="footer-col">
-            <h5>Importante</h5>
-            <ul>
-                <li><a onclick="switchTab('termos')">Termos de uso</a></li>
-            </ul>
-        </div>
-        <div class="footer-col">
-            <h5>Socials</h5>
-            <div class="footer-socials-row">
-                <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#"><i class="fa-brands fa-discord"></i></a>
-            </div>
-        </div>
-    </footer>
-
-    <!-- INTERATIVIDADE JAVASCRIPT EM TEMPO REAL -->
     <script>
-        // Memória do carrinho em tempo de execução
-        let cart = [];
-        let isUserLoggedIn = true; // Iniciado como conectado no Discord conforme solicitado
+        // --- COLOQUE AS SUAS CREDENCIAIS DO SUPABASE AQUI ---
+        const SUPABASE_URL = "https://SEU_PROJETO.supabase.co";
+        const SUPABASE_ANON_KEY = "SUA_ANON_KEY_AQUI";
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        // Simulando a sessão persistente de um utilizador real do Discord
+        const MockUser = {
+            id: "28472948193849182", // Discord ID fictício real
+            username: "elzorrito1",
+            email: "ptrodri3@gmail.com"
+        };
+
+        let cart = [];
+
+        async function initSession() {
+            // Verifica se o cliente existe no banco, se não, cria de forma automatizada
+            const { data, error } = await _supabase.from('clientes').select('*').eq('discord_id', MockUser.id).single();
+            
+            if (!data) {
+                const randomKey = "MTAX-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+                await _supabase.from('clientes').insert([
+                    { discord_id: MockUser.id, username: MockUser.username, email: MockUser.email, chave_mtax: randomKey, server_ip: "135.148.161.23" }
+                ]);
+            }
+            
+            document.getElementById('username-display').innerText = MockUser.username;
+            document.getElementById('profile-name').innerText = MockUser.username;
+            document.getElementById('client-discord-id').value = MockUser.id;
+            
+            loadClientData();
+        }
+
+        async function loadClientData() {
+            // Carrega dados cadastrais
+            const { data: cliente } = await _supabase.from('clientes').select('*').eq('discord_id', MockUser.id).single();
+            if(cliente) {
+                document.getElementById('client-key').value = cliente.chave_mtax;
+                document.getElementById('client-server-ip').value = cliente.server_ip;
+            }
+
+            // Carrega Licenças dinamicamente
+            const { data: licencas } = await _supabase.from('licencas').select('nome_resource').eq('discord_id', MockUser.id);
+            const container = document.getElementById('client-owned-resources');
+            container.innerHTML = "";
+
+            if(licencas && licencas.length > 0) {
+                licencas.forEach(lic => {
+                    container.innerHTML += `
+                        <div class="card-item">
+                            <div class="item-info">
+                                <h4 style="color:var(--cor-primaria)"><i class="fa-solid fa-circle-check"></i> ${lic.nome_resource}</h4>
+                                <p style="font-size:11px; margin-top:5px; color:var(--texto-mutated)">Status: Licença Ativa</p>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                container.innerHTML = "<p style='font-size:12px; color:var(--texto-mutado)'>Nenhum resource adquirido nesta conta.</p>";
+            }
+        }
+
+        async function saveClientSettings() {
+            const novoIp = document.getElementById('client-server-ip').value;
+            const { error } = await _supabase.from('clientes').update({ server_ip: novoIp }).eq('discord_id', MockUser.id);
+            
+            if(!error) {
+                showToast("IP do servidor atualizado com sucesso!");
+            } else {
+                showToast("Erro ao salvar dados.");
+            }
+        }
+
+        async function processCheckout() {
+            if(cart.length === 0) return showToast("Carrinho vazio!");
+            
+            // Adiciona de forma automatizada os produtos comprados ao Supabase
+            for (let item of cart) {
+                await _supabase.from('licencas').insert([{ discord_id: MockUser.id, nome_resource: item.name }]);
+            }
+            
+            showToast("Compra efetuada! Recursos liberados na aba do cliente.");
+            cart = [];
+            updateCartUI();
+            loadClientData();
+        }
+
+        // Funções Base de Interface
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('nav ul li a').forEach(link => link.classList.remove('active'));
-            
             document.getElementById('tab-' + tabName).classList.add('active');
-            const activeNav = document.getElementById('nav-' + tabName);
-            if(activeNav) activeNav.classList.add('active');
-            window.scrollTo(0,0);
+            if(document.getElementById('nav-' + tabName)) document.getElementById('nav-' + tabName).classList.add('active');
         }
 
-        // Fluxo de Autenticação Discord Simulada
-        function handleLogout() {
-            isUserLoggedIn = false;
-            document.getElementById('session-logged').style.display = 'none';
-            document.getElementById('session-anonymous').style.display = 'flex';
-            document.getElementById('client-panel-logged').style.display = 'none';
-            document.getElementById('client-panel-anonymous').style.display = 'block';
-            showToast("Sessão encerrada com sucesso!");
-        }
-
-        function handleDiscordLogin() {
-            isUserLoggedIn = true;
-            document.getElementById('session-logged').style.display = 'block';
-            document.getElementById('session-anonymous').style.display = 'none';
-            document.getElementById('client-panel-logged').style.display = 'grid';
-            document.getElementById('client-panel-anonymous').style.display = 'none';
-            showToast("Logado com sucesso via Discord!");
-            switchTab('cliente');
-        }
-
-        // Sistema Operacional do Carrinho de Compras
-        function addToCart(productName, price) {
-            // Evita duplicados
-            if(cart.some(item => item.name === productName)) {
-                showToast("Este item já está no seu carrinho!");
-                return;
-            }
-            cart.push({ name: productName, price: price });
+        function addToCart(name, price) {
+            if(cart.some(i => i.name === name)) return showToast("Item já adicionado!");
+            cart.push({name, price});
             updateCartUI();
-            showToast(`${productName} adicionado ao carrinho!`);
+            showToast(`${name} no carrinho!`);
         }
 
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCartUI();
-        }
+        function removeFromCart(index) { cart.splice(index, 1); updateCartUI(); }
 
         function updateCartUI() {
-            const listElement = document.getElementById('cart-list');
-            const emptyNotice = document.getElementById('cart-empty-notice');
-            const globalCounter = document.getElementById('global-cart-counter');
-            
-            globalCounter.innerText = cart.length;
-            listElement.innerHTML = "";
-
-            if(cart.length === 0) {
-                emptyNotice.style.display = "block";
-                document.getElementById('subtotal-val').innerText = "R$ 0,00";
-                document.getElementById('total-val').innerText = "R$ 0,00";
-                return;
-            }
-
-            emptyNotice.style.display = "none";
-            let subtotal = 0;
-
-            cart.forEach((item, index) => {
-                subtotal += item.price;
-                listElement.innerHTML += `
-                    <div class="cart-product-row">
-                        <span>${item.name}</span>
-                        <div>
-                            <span style="color:var(--cor-primaria); margin-right: 10px;">R$ ${item.price}</span>
-                            <button class="remove-item-btn" onclick="removeFromCart(${index})"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </div>
-                `;
+            const list = document.getElementById('cart-list');
+            list.innerHTML = "";
+            document.getElementById('cart-empty-notice').style.display = cart.length === 0 ? "block" : "none";
+            cart.forEach((item, idx) => {
+                list.innerHTML += `<div class="cart-product-row"><span>${item.name}</span><button class="remove-item-btn" onclick="removeFromCart(${idx})">Remover</button></div>`;
             });
-
-            document.getElementById('subtotal-val').innerText = `R$ ${subtotal},00`;
-            document.getElementById('total-val').innerText = `R$ ${subtotal},00`;
-        }
-
-        function processCheckout() {
-            if(cart.length === 0) {
-                showToast("Seu carrinho está vazio!");
-                return;
-            }
-            if(!document.getElementById('check-termos').checked) {
-                showToast("Você deve aceitar os termos de serviço!");
-                return;
-            }
-            showToast("Pedido gerado! Redirecionando para pagamento...");
-            cart = [];
-            updateCartUI();
-        }
-
-        // Recursos Gerais & Utilitários
-        function saveClientSettings() {
-            const ip = document.getElementById('client-server-ip').value;
-            showToast(`Configurações salvas para o IP: ${ip}`);
-        }
-
-        function copyText(text) {
-            navigator.clipboard.writeText(text);
-            showToast("Copiado para a área de transferência!");
         }
 
         function showToast(text) {
-            const toast = document.getElementById('toast');
+            const t = document.getElementById('toast');
             document.getElementById('toast-text').innerText = text;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
         }
 
-        function toggleAccordion(element) {
-            const parent = element.parentElement;
-            const isOpen = parent.classList.contains('open');
-            document.querySelectorAll('.accordion-item').forEach(item => item.classList.remove('open'));
-            if (!isOpen) parent.classList.add('open');
+        function copyKey() {
+            navigator.clipboard.writeText(document.getElementById('client-key').value);
+            showToast("Chave copiada!");
         }
+
+        window.onload = initSession;
     </script>
 </body>
 </html>
