@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trust Store | Sistema de Licenciamento Supabase</title>
+    <title>Trust Store | Plataforma Profissional de Licenciamento</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -38,7 +38,7 @@
             overflow-x: hidden; 
         }
 
-        /* Animação suave para troca de abas */
+        /* Transições de Abas */
         .tab-content { 
             display: none; 
             animation: fadeIn 0.4s ease-in-out forwards; 
@@ -53,13 +53,13 @@
             to { opacity: 1; transform: translateY(0); } 
         }
 
-        /* HEADER & NAVBAR */
+        /* NAVBAR SUPERIOR */
         header { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
             padding: 18px 8%; 
-            background-color: rgba(11, 18, 31, 0.95); 
+            background-color: rgba(11, 18, 31, 0.98); 
             border-bottom: 1px solid var(--borda); 
             position: sticky; 
             top: 0; 
@@ -69,7 +69,7 @@
         .logo-container { 
             display: flex; 
             align-items: center; 
-            gap: 10px; 
+            gap: 12px; 
             font-size: 22px; 
             font-weight: 700; 
             cursor: pointer; 
@@ -107,7 +107,7 @@
             gap: 20px; 
         }
 
-        /* DROPDOWN PERFIL */
+        /* DROPDOWN DO PERFIL */
         .profile-wrapper { 
             position: relative; 
             display: inline-block; 
@@ -185,14 +185,15 @@
             background-color: #4752C4; 
         }
 
-        /* ESTRUTURA DA LOJA */
+        /* LAYOUT PRINCIPAL DA PAGINA INICIAL */
         .shop-banner-container { 
-            padding: 30px 8% 10px 8%; 
+            padding: 30px 8% 0px 8%; 
         }
 
+        /* Banner de Anúncio Superior (Parceiros/Promoções) */
         .main-promo-banner { 
             width: 100%; 
-            height: 180px; 
+            height: 160px; 
             background-image: url('{AABB5039-2A08-4B3A-81FE-DC2B32DC7A6E}.jpg');
             background-size: cover;
             background-position: center;
@@ -201,6 +202,15 @@
             display: flex;
             align-items: center;
             padding-left: 40px;
+            position: relative;
+        }
+
+        .main-promo-banner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(11, 18, 31, 0.6);
+            border-radius: 7px;
         }
 
         .main-promo-banner h2 {
@@ -208,19 +218,89 @@
             font-weight: 800;
             letter-spacing: 1px;
             text-shadow: 0 4px 10px rgba(0,0,0,0.8);
+            position: relative;
+            z-index: 2;
         }
 
         .main-promo-banner h2 span {
             color: var(--cor-primaria);
         }
 
+        /* Grid Tripla (Categorias, Conteúdo, Carrinho) */
         .shop-workspace { 
-            padding: 20px 8% 80px 8%; 
+            padding: 20px 8% 60px 8%; 
             display: grid; 
-            grid-template-columns: 3fr 1.4fr; 
-            gap: 30px; 
+            grid-template-columns: 240px 1fr 300px; 
+            gap: 25px; 
         }
 
+        /* MENU DE CATEGORIAS LATERAL (SIDEBAR ESQUERDA) */
+        .categories-sidebar {
+            background-color: var(--bg-card);
+            border: 1px solid var(--borda);
+            border-radius: 8px;
+            padding: 20px;
+            height: fit-content;
+        }
+
+        .sidebar-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--texto-claro);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--borda);
+            padding-bottom: 8px;
+        }
+
+        .category-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--texto-mutado);
+            padding: 10px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: left;
+            transition: all 0.2s;
+            margin-bottom: 5px;
+        }
+
+        .category-btn i {
+            font-size: 14px;
+            width: 20px;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background: rgba(244, 157, 18, 0.1);
+            color: var(--cor-primaria);
+        }
+
+        /* FEED DE NOTÍCIAS/AVISOS */
+        .announcement-box {
+            background: rgba(244, 157, 18, 0.03);
+            border: 1px dashed rgba(244, 157, 18, 0.2);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 13px;
+        }
+
+        .announcement-box i {
+            color: var(--cor-primaria);
+            font-size: 18px;
+        }
+
+        /* GRID CENTRAL DE PRODUTOS */
         .shop-items-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
@@ -248,9 +328,6 @@
             height: 140px; 
             background-size: cover;
             background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .item-info { 
@@ -313,7 +390,7 @@
             background: rgba(255, 255, 255, 0.03);
         }
 
-        /* SIDEBAR DO CARRINHO */
+        /* SIDEBAR DO CARRINHO (DIREITA) */
         .checkout-sidebar { 
             background-color: var(--bg-card); 
             border: 1px solid var(--borda); 
@@ -389,7 +466,7 @@
             background: var(--cor-primaria-hover);
         }
 
-        /* ÁREA DO CLIENTE */
+        /* WORKSPACE DA ÁREA DO CLIENTE */
         .client-area-workspace { 
             padding: 40px 8% 80px 8%; 
             display: grid; 
@@ -479,7 +556,7 @@
             background: var(--cor-primaria-hover);
         }
 
-        /* TOAST SYSTEM */
+        /* TOAST NOTIFICATION GLOBAL */
         .toast-notification { 
             position: fixed; 
             bottom: 25px; 
@@ -500,6 +577,16 @@
 
         .toast-notification.show { 
             transform: translateX(0); 
+        }
+
+        /* RODAPÉ (FOOTER) */
+        footer {
+            background-color: #080d16;
+            border-top: 1px solid var(--borda);
+            padding: 30px 8%;
+            text-align: center;
+            font-size: 12px;
+            color: var(--texto-mutado);
         }
     </style>
 </head>
@@ -548,39 +635,54 @@
         </div>
         
         <div class="shop-workspace">
-            <div class="shop-items-grid">
-                <div class="card-item">
-                    <div class="item-banner" style="background-image: url('{D877220A-E806-4972-AE21-B8C362B1A1A0}.png');"></div>
-                    <div class="item-info">
-                        <h4>Pack de Vegetação</h4>
-                        <div class="price-tag">R$ 30,00</div>
-                        <div class="action-row-shop">
-                            <button class="btn-cart-add-small" onclick="addToCart('Pack de Vegetação', 30)"><i class="fa-solid fa-cart-shopping"></i></button>
-                            <button class="btn-card-info">Detalhes</button>
+            <div class="categories-sidebar">
+                <div class="sidebar-title">Categorias</div>
+                <button class="category-btn active" onclick="filterCategory('todos')"><i class="fa-solid fa-border-all"></i> Todos</button>
+                <button class="category-btn" onclick="filterCategory('sistemas')"><i class="fa-solid fa-gears"></i> Sistemas Core</button>
+                <button class="category-btn" onclick="filterCategory('mapas')"><i class="fa-solid fa-map-location-dot"></i> Mapas / Mappings</button>
+                <button class="category-btn" onclick="filterCategory('mods')"><i class="fa-solid fa-car"></i> Veículos & Mods</button>
+            </div>
+
+            <div>
+                <div class="announcement-box">
+                    <i class="fa-solid fa-bullhorn"></i>
+                    <span><strong>Novidade:</strong> Sistema de validação via Supabase ativo. Atualiza o teu IP na Área do Cliente para liberar o acesso.</span>
+                </div>
+
+                <div class="shop-items-grid">
+                    <div class="card-item" data-category="mapas">
+                        <div class="item-banner" style="background-image: url('{D877220A-E806-4972-AE21-B8C362B1A1A0}.png');"></div>
+                        <div class="item-info">
+                            <h4>Pack de Vegetação</h4>
+                            <div class="price-tag">R$ 30,00</div>
+                            <div class="action-row-shop">
+                                <button class="btn-cart-add-small" onclick="addToCart('Pack de Vegetação', 30)"><i class="fa-solid fa-cart-shopping"></i></button>
+                                <button class="btn-card-info">Detalhes</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="card-item">
-                    <div class="item-banner" style="background-image: url('{AABB5039-2A08-4B3A-81FE-DC2B32DC7A6E}.jpg');"></div>
-                    <div class="item-info">
-                        <h4>Posto de Gasolina</h4>
-                        <div class="price-tag">R$ 45,00</div>
-                        <div class="action-row-shop">
-                            <button class="btn-cart-add-small" onclick="addToCart('Posto de Gasolina', 45)"><i class="fa-solid fa-cart-shopping"></i></button>
-                            <button class="btn-card-info">Detalhes</button>
+                    
+                    <div class="card-item" data-category="mapas">
+                        <div class="item-banner" style="background-image: url('{AABB5039-2A08-4B3A-81FE-DC2B32DC7A6E}.jpg');"></div>
+                        <div class="item-info">
+                            <h4>Posto de Gasolina</h4>
+                            <div class="price-tag">R$ 45,00</div>
+                            <div class="action-row-shop">
+                                <button class="btn-cart-add-small" onclick="addToCart('Posto de Gasolina', 45)"><i class="fa-solid fa-cart-shopping"></i></button>
+                                <button class="btn-card-info">Detalhes</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="card-item">
-                    <div class="item-banner" style="background-image: url('{D0CBF644-4DE8-4AD0-BE5A-3E78D88F2EA9}.jpg');"></div>
-                    <div class="item-info">
-                        <h4>Metrô System</h4>
-                        <div class="price-tag">R$ 40,00</div>
-                        <div class="action-row-shop">
-                            <button class="btn-cart-add-small" onclick="addToCart('Metrô System', 40)"><i class="fa-solid fa-cart-shopping"></i></button>
-                            <button class="btn-card-info">Detalhes</button>
+                    
+                    <div class="card-item" data-category="sistemas">
+                        <div class="item-banner" style="background-image: url('{D0CBF644-4DE8-4AD0-BE5A-3E78D88F2EA9}.jpg');"></div>
+                        <div class="item-info">
+                            <h4>Metrô System</h4>
+                            <div class="price-tag">R$ 40,00</div>
+                            <div class="action-row-shop">
+                                <button class="btn-cart-add-small" onclick="addToCart('Metrô System', 40)"><i class="fa-solid fa-cart-shopping"></i></button>
+                                <button class="btn-card-info">Detalhes</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -590,7 +692,7 @@
                 <div class="sidebar-head"><i class="fa-solid fa-basket-shopping"></i> Teu Carrinho</div>
                 <div class="cart-items-container" id="cart-list"></div>
                 <div class="empty-basket" id="cart-empty-notice">O carrinho está vazio atualmente.</div>
-                <button class="btn-checkout-confirm" onclick="processCheckout()">Confirmar Admissão / Simular Compra</button>
+                <button class="btn-checkout-confirm" onclick="processCheckout()">Confirmar Compra Direta</button>
             </div>
         </div>
     </div>
@@ -626,11 +728,15 @@
                 </div>
                 
                 <button class="btn-save-config" onclick="saveClientSettings()">
-                    <i class="fa-solid fa-floppy-disk"></i> Salvar Alterações no Supabase
+                    <i class="fa-solid fa-floppy-disk"></i> Salvar IP no Supabase
                 </button>
             </div>
         </div>
     </div>
+
+    <footer>
+        &copy; 2026 Trust Store. Todos os direitos reservados. Plataforma de Autenticação Integrada ao Supabase Rest API.
+    </footer>
 
     <script>
         // ==========================================
@@ -639,10 +745,9 @@
         const SUPABASE_URL = "https://SEU_PROJETO.supabase.co";
         const SUPABASE_ANON_KEY = "SUA_ANON_KEY_AQUI";
         
-        // Inicialização Global da Instância de conexão
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Usuário Fictício Simulado Baseado no Login do Discord
+        // Cliente Simulado Conectado Automaticamente
         const MockUser = {
             id: "28472948193849182", 
             username: "elzorrito1",
@@ -651,67 +756,41 @@
 
         let cart = [];
 
-        // Inicializador ao Abrir a Página
+        // Conecta e verifica registro na inicialização
         async function initSession() {
             try {
-                // Tenta buscar o cliente na tabela correspondente do Supabase
-                const { data: cliente, error } = await _supabase
+                const { data: cliente } = await _supabase
                     .from('clientes')
                     .select('*')
                     .eq('discord_id', MockUser.id)
                     .single();
                 
-                // Se o cliente não existir, faz a inscrição automatizada dele pela primeira vez
                 if (!cliente) {
                     const randomKey = "MTAX-" + Math.random().toString(36).substr(2, 9).toUpperCase();
-                    const { error: insertError } = await _supabase
-                        .from('clientes')
-                        .insert([
-                            { 
-                                discord_id: MockUser.id, 
-                                username: MockUser.username, 
-                                email: MockUser.email, 
-                                chave_mtax: randomKey, 
-                                server_ip: "135.148.161.23" 
-                            }
-                        ]);
-                    
-                    if(insertError) throw insertError;
+                    await _supabase.from('clientes').insert([
+                        { discord_id: MockUser.id, username: MockUser.username, email: MockUser.email, chave_mtax: randomKey, server_ip: "135.148.161.23" }
+                    ]);
                 }
                 
-                // Atualiza os Textos Globais da Interface
                 document.getElementById('username-display').innerText = MockUser.username;
                 document.getElementById('profile-name').innerText = MockUser.username;
                 document.getElementById('client-discord-id').value = MockUser.id;
                 
-                // Carrega todos os dados do banco atualizados
                 loadClientData();
             } catch (err) {
-                console.error("Erro na comunicação com o Supabase:", err);
-                showToast("Erro ao conectar ao Supabase. Verifica as tuas Chaves/APIs.", true);
+                showToast("Erro ao conectar ao Supabase.", true);
             }
         }
 
-        // Busca Informações Cadastrais e Lista de Licenças Ativas do Cliente
+        // Puxa as informações cadastrais e licenças ativas do cliente
         async function loadClientData() {
-            // 1. Puxa dados do cliente (Como o IP salvo)
-            const { data: cliente } = await _supabase
-                .from('clientes')
-                .select('*')
-                .eq('discord_id', MockUser.id)
-                .single();
-                
+            const { data: cliente } = await _supabase.from('clientes').select('*').eq('discord_id', MockUser.id).single();
             if(cliente) {
                 document.getElementById('client-key').value = cliente.chave_mtax;
                 document.getElementById('client-server-ip').value = cliente.server_ip;
             }
 
-            // 2. Puxa as licenças reais vinculadas a esta conta
-            const { data: licencas, error } = await _supabase
-                .from('licencas')
-                .select('nome_resource')
-                .eq('discord_id', MockUser.id);
-                
+            const { data: licencas } = await _supabase.from('licencas').select('nome_resource').eq('discord_id', MockUser.id);
             const container = document.getElementById('client-owned-resources');
             container.innerHTML = "";
 
@@ -720,110 +799,91 @@
                     container.innerHTML += `
                         <div class="card-item" style="border-left: 3px solid var(--cor-primaria)">
                             <div class="item-info">
-                                <h4 style="color:var(--cor-primaria); font-size:15px;">
-                                    <i class="fa-solid fa-circle-check"></i> ${lic.nome_resource}
-                                </h4>
-                                <p style="font-size:11px; margin-top:5px; color:var(--texto-mutado)">
-                                    Autorizado para uso no Servidor MTA
-                                </p>
+                                <h4 style="color:var(--cor-primaria); font-size:15px;"><i class="fa-solid fa-circle-check"></i> ${lic.nome_resource}</h4>
+                                <p style="font-size:11px; margin-top:5px; color:var(--texto-mutado)">Licenciado e pronto para rodar no MTA</p>
                             </div>
                         </div>
                     `;
                 });
             } else {
-                container.innerHTML = `
-                    <p style='font-size:12px; color:var(--texto-mutado); grid-column: 1/-1;'>
-                        Nenhum script ativado ou comprado nesta conta até ao momento.
-                    </p>
-                `;
+                container.innerHTML = `<p style='font-size:12px; color:var(--texto-mutado); grid-column: 1/-1;'>Nenhum script ativo nesta conta.</p>`;
             }
         }
 
-        // Salva o novo IP na Tabela do Supabase
+        // Envia as atualizações de IP do Host do cliente para o Supabase
         async function saveClientSettings() {
             const novoIp = document.getElementById('client-server-ip').value.trim();
-            
             if(novoIp === "") return showToast("Insere um IP válido!", true);
 
-            const { error } = await _supabase
-                .from('clientes')
-                .update({ server_ip: novoIp })
-                .eq('discord_id', MockUser.id);
-            
+            const { error } = await _supabase.from('clientes').update({ server_ip: novoIp }).eq('discord_id', MockUser.id);
             if(!error) {
-                showToast("IP do servidor atualizado no Supabase!");
+                showToast("IP atualizado com sucesso!");
                 loadClientData();
             } else {
-                showToast("Erro ao processar alteração.", true);
+                showToast("Falha ao salvar dados.", true);
             }
         }
 
-        // Simula Compra Adicionando Linhas Diretamente na Tabela de Licenças
+        // Cria a linha de registro dinamicamente na tabela 'licencas' ao finalizar compra
         async function processCheckout() {
-            if(cart.length === 0) return showToast("O teu carrinho está vazio!", true);
-            
+            if(cart.length === 0) return showToast("Carrinho vazio!", true);
             try {
-                // Sobe cada item comprado para a tabela 'licencas' vinculando ao ID do cliente
                 for (let item of cart) {
-                    await _supabase
-                        .from('licencas')
-                        .insert([{ discord_id: MockUser.id, nome_resource: item.name }]);
+                    await _supabase.from('licencas').insert([{ discord_id: MockUser.id, nome_resource: item.name }]);
                 }
-                
-                showToast("Processado com sucesso! Licença gerada no banco.");
+                showToast("Compra realizada! Script liberado.");
                 cart = [];
                 updateCartUI();
                 loadClientData();
-                switchTab('cliente'); // Redireciona o usuário direto para ver o script liberado
+                switchTab('cliente');
             } catch(e) {
-                showToast("Erro ao processar compra.", true);
+                showToast("Erro na transação.", true);
             }
         }
 
-        // Métodos de Controle da Loja/Carrinho Local
+        // Filtragem de Categorias na Página Inicial
+        function filterCategory(category) {
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            document.querySelectorAll('.card-item').forEach(card => {
+                if (category === 'todos' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Controles de Abas e Carrinho Local
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('nav ul li a').forEach(link => link.classList.remove('active'));
-            
             document.getElementById('tab-' + tabName).classList.add('active');
-            if(document.getElementById('nav-' + tabName)) {
-                document.getElementById('nav-' + tabName).classList.add('active');
-            }
+            if(document.getElementById('nav-' + tabName)) document.getElementById('nav-' + tabName).classList.add('active');
         }
 
         function addToCart(name, price) {
-            if(cart.some(i => i.name === name)) return showToast("Este item já está no carrinho!", true);
+            if(cart.some(i => i.name === name)) return showToast("Item já adicionado!", true);
             cart.push({name, price});
             updateCartUI();
-            showToast(`${name} adicionado ao carrinho.`);
+            showToast(`${name} adicionado.`);
         }
 
-        function removeFromCart(index) { 
-            cart.splice(index, 1); 
-            updateCartUI(); 
-        }
+        function removeFromCart(index) { cart.splice(index, 1); updateCartUI(); }
 
         function updateCartUI() {
             const list = document.getElementById('cart-list');
             list.innerHTML = "";
-            
             document.getElementById('cart-empty-notice').style.display = cart.length === 0 ? "block" : "none";
-            
             cart.forEach((item, idx) => {
-                list.innerHTML += `
-                    <div class="cart-product-row">
-                        <span>${item.name}</span>
-                        <button class="remove-item-btn" onclick="removeFromCart(${idx})">Remover</button>
-                    </div>
-                `;
+                list.innerHTML += `<div class="cart-product-row"><span>${item.name}</span><button class="remove-item-btn" onclick="removeFromCart(${idx})">Remover</button></div>`;
             });
         }
 
-        // Sistema de Alertas Visuais Dinâmicos (Toasts)
         function showToast(text, isError = false) {
             const t = document.getElementById('toast');
             const icon = document.getElementById('toast-icon');
-            
             document.getElementById('toast-text').innerText = text;
             
             if(isError) {
@@ -835,26 +895,18 @@
                 icon.className = "fa-solid fa-circle-check";
                 icon.style.color = "var(--sucesso)";
             }
-
             t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 3500);
         }
 
         function copyKey() {
-            const keyInput = document.getElementById('client-key');
-            navigator.clipboard.writeText(keyInput.value);
-            showToast("Token de ativação copiado para a Área de transferência.");
+            navigator.clipboard.writeText(document.getElementById('client-key').value);
+            showToast("Token de ativação copiado!");
         }
 
-        function handleLogout() {
-            showToast("Simulação de Logout concluída.");
-        }
+        function handleLogout() { showToast("Sessão finalizada."); }
+        function handleDiscordLogin() { showToast("Login ativo."); }
 
-        function handleDiscordLogin() {
-            showToast("O login integrado já está ativo em ambiente local.");
-        }
-
-        // Gatilho Inicializador Automático
         window.onload = initSession;
     </script>
 </body>
